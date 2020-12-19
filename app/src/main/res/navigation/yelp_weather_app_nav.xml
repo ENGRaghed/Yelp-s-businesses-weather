@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/yelp_weather_app_nav"
+    app:startDestination="@id/mapFragment">
+
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="com.bignerdranch.android.yelpsbusinessesweather.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_mapFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/detailsFragment"
+        android:name="com.bignerdranch.android.yelpsbusinessesweather.DetailsFragment"
+        android:label="fragment_details"
+        tools:layout="@layout/fragment_details" >
+        <action
+            android:id="@+id/action_detailsFragment_to_mapFragment"
+            app:destination="@id/mapFragment" />
+        <argument
+            android:name="yelp"
+            app:argType="com.bignerdranch.android.yelpsbusinessesweather.YelpRestaurant" />
+    </dialog>
+</navigation>
