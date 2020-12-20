@@ -11,10 +11,12 @@ object ServiceLocator {
     private lateinit var app: App
     lateinit var retrofit: Retrofit
     lateinit var yelpApi: YelpApi
+    lateinit var weatherApi: WeatherApi
 
     fun init(app: App) {
         this.app = app
         initializeNetwork(app)
+        initializeNetworkWeather(app)
     }
 
 
@@ -27,8 +29,17 @@ object ServiceLocator {
         yelpApi = retrofit.create(YelpApi::class.java)
     }
 
+    private fun initializeNetworkWeather(context: Context) {
+        retrofit = Retrofit.Builder()
+            .baseUrl("https://api.weatherapi.com/v1/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        weatherApi = retrofit.create(WeatherApi::class.java)
+    }
+
     val repository : Repository by lazy {
-        Repository(yelpApi)
+        Repository(yelpApi, weatherApi)
     }
 
 }

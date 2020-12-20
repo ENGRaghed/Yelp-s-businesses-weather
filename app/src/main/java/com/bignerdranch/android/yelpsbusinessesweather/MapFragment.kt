@@ -37,25 +37,49 @@ class MapFragment : Fragment() {
          * user has installed Google Play services and returned to the app.
          */
 
+        val sydney = LatLng(-34.0, 151.0)
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+
+
 
         viewModel= ViewModelProvider(this).get(YelpViewModel::class.java)
 
-        viewModel.getYelpBusinesses("Bearer $API_KEY", "40.814564", "-74.220654").observe(viewLifecycleOwner,
-            Observer {
-                Log.i("MainActivity","$it")
-                val boundsBuilder = LatLngBounds.Builder()
+        googleMap.setOnMapClickListener {
+            //"40.814564", "-74.220654"
+            viewModel.getYelpBusinesses("Bearer $API_KEY", it.latitude.toString(),it.longitude.toString()).observe(viewLifecycleOwner,
+                Observer {
+                    Log.i("MainActivity","$it")
+                    val boundsBuilder = LatLngBounds.Builder()
 
-                it.forEach {
-                    val latLng = LatLng(it.coordinates.latitude,it.coordinates.longitude)
+                    it.forEach {
+                        val latLng = LatLng(it.coordinates.latitude,it.coordinates.longitude)
 //                    googleMap.addMarker(MarkerOptions().position(latLng).title("Marker in Sydney"))
 //                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
 
-                    boundsBuilder.include(latLng)
-                    googleMap.addMarker(MarkerOptions().position(latLng).title("${it.name}")).tag = it
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 1000, 1000, 0))
+                        boundsBuilder.include(latLng)
+                        googleMap.addMarker(MarkerOptions().position(latLng).title("${it.name}")).tag = it
+                        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 1000, 1000, 0))
 
-                }
-            })
+                    }
+                })
+        }
+
+//        viewModel.getYelpBusinesses("Bearer $API_KEY", "40.814564", "-74.220654").observe(viewLifecycleOwner,
+//            Observer {
+//                Log.i("MainActivity","$it")
+//                val boundsBuilder = LatLngBounds.Builder()
+//
+//                it.forEach {
+//                    val latLng = LatLng(it.coordinates.latitude,it.coordinates.longitude)
+////                    googleMap.addMarker(MarkerOptions().position(latLng).title("Marker in Sydney"))
+////                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+//
+//                    boundsBuilder.include(latLng)
+//                    googleMap.addMarker(MarkerOptions().position(latLng).title("${it.name}")).tag = it
+//                    googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 1000, 1000, 0))
+//
+//                }
+//            })
 
         googleMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener{
             override fun onMarkerClick(p0: Marker?): Boolean {

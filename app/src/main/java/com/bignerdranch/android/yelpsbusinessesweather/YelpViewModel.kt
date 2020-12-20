@@ -16,4 +16,12 @@ class YelpViewModel : ViewModel() {
         }
         return yelp
     }
+
+    fun getCurrentWeather(key : String,latlon : String,days:String):LiveData<Weather>{
+        val weather = MutableLiveData<Weather>()
+        viewModelScope.launch {
+            weather.value = repository.getWeather(key,latlon,days)
+        }
+        return weather
+    }
 }
