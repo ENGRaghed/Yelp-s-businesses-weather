@@ -1,6 +1,10 @@
 package com.bignerdranch.android.yelpsbusinessesweather
 
 import android.content.Context
+import androidx.room.Room
+import com.bignerdranch.android.yelpsbusinessesweather.network.WeatherApi
+import com.bignerdranch.android.yelpsbusinessesweather.network.YelpApi
+import com.bignerdranch.android.yelpsbusinessesweather.repository.Repository
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 private const val YELP_BASE_URL = "https://api.yelp.com/v3/"
@@ -12,11 +16,13 @@ object ServiceLocator {
     lateinit var retrofit: Retrofit
     lateinit var yelpApi: YelpApi
     lateinit var weatherApi: WeatherApi
+    lateinit var businessesDatabase: BusinessesDatabase
 
     fun init(app: App) {
         this.app = app
         initializeNetwork(app)
         initializeNetworkWeather(app)
+        initializeDatabase(app)
     }
 
 
@@ -38,8 +44,16 @@ object ServiceLocator {
         weatherApi = retrofit.create(WeatherApi::class.java)
     }
 
+    fun initializeDatabase(context: Context) {
+        businessesDatabase = Room.databaseBuilder(
+            context.applicationContext,
+            BusinessesDatabase::class.java,
+            "businesses_database"
+        ).build()
+    }
+
     val repository : Repository by lazy {
-        Repository(yelpApi, weatherApi)
+        Repository(yelpApi, weatherApi, businessesDatabase.businessesDao())
     }
 
 }

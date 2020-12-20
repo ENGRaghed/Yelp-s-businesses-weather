@@ -1,5 +1,6 @@
-package com.bignerdranch.android.yelpsbusinessesweather
+package com.bignerdranch.android.yelpsbusinessesweather.network
 
+import com.bignerdranch.android.yelpsbusinessesweather.model.Weather
 import retrofit2.http.GET
 import retrofit2.http.Query
 

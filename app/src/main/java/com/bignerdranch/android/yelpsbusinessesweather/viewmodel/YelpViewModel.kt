@@ -1,13 +1,18 @@
-package com.bignerdranch.android.yelpsbusinessesweather
+package com.bignerdranch.android.yelpsbusinessesweather.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.bignerdranch.android.yelpsbusinessesweather.ServiceLocator
+import com.bignerdranch.android.yelpsbusinessesweather.model.Weather
+import com.bignerdranch.android.yelpsbusinessesweather.model.YelpRestaurant
 import kotlinx.coroutines.launch
 
 class YelpViewModel : ViewModel() {
     val repository = ServiceLocator.repository
+
+    val readAllBusinesses : LiveData<List<YelpRestaurant>> = repository.readAllBusinesses
 
     fun getYelpBusinesses(Autho : String,lat:String,lon:String):LiveData<List<YelpRestaurant>>{
         val yelp = MutableLiveData<List<YelpRestaurant>>()
@@ -24,4 +29,6 @@ class YelpViewModel : ViewModel() {
         }
         return weather
     }
+
+
 }

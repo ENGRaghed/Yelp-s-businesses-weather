@@ -24,6 +24,6 @@
             app:destination="@id/mapFragment" />
         <argument
             android:name="yelp"
-            app:argType="com.bignerdranch.android.yelpsbusinessesweather.YelpRestaurant" />
+            app:argType="com.bignerdranch.android.yelpsbusinessesweather.model.YelpRestaurant" />
     </dialog>
 </navigation>

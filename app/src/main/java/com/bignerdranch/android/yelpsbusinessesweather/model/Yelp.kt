@@ -1,24 +1,26 @@
-package com.bignerdranch.android.yelpsbusinessesweather
+package com.bignerdranch.android.yelpsbusinessesweather.model
 
 import android.os.Parcelable
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
-data class Yelp(
-    @SerializedName("total") val total: Int,
-    @SerializedName("businesses") val restaurants: List<YelpRestaurant>
-)
 
+@Entity(tableName = "businesses_table")
 @Parcelize
 data class YelpRestaurant(
+    @PrimaryKey(autoGenerate = true)
+    var yelpId : Int = 0,
     val name: String,
     val rating: Double,
-    val price: String,
+    val price: String?,
     @SerializedName("review_count") val numReviews: Int,
     @SerializedName("distance") val distanceInMeters: Double,
     @SerializedName("image_url") val imageUrl: String,
     val categories: List<YelpCategory>,
-    val location: YelpLocation, val coordinates: Coordinates
+    val location: YelpLocation,
+    val coordinates: Coordinates
 ) : Parcelable {
     fun displayDistance(): String {
         val milesPerMeter = 0.000621371

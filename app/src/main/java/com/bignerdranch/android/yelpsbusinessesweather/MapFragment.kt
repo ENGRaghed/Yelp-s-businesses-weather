@@ -1,5 +1,7 @@
 package com.bignerdranch.android.yelpsbusinessesweather
 
+import android.content.Context
+import android.net.ConnectivityManager
 import androidx.fragment.app.Fragment
 
 import android.os.Bundle
@@ -10,6 +12,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import com.bignerdranch.android.yelpsbusinessesweather.model.YelpRestaurant
+import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.YelpViewModel
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -37,32 +41,45 @@ class MapFragment : Fragment() {
          * user has installed Google Play services and returned to the app.
          */
 
+        val connectivityManager = context?.
+        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+
         val sydney = LatLng(-34.0, 151.0)
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
-
-
         viewModel= ViewModelProvider(this).get(YelpViewModel::class.java)
 
-        googleMap.setOnMapClickListener {
-            //"40.814564", "-74.220654"
-            viewModel.getYelpBusinesses("Bearer $API_KEY", it.latitude.toString(),it.longitude.toString()).observe(viewLifecycleOwner,
-                Observer {
-                    Log.i("MainActivity","$it")
-                    val boundsBuilder = LatLngBounds.Builder()
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
 
-                    it.forEach {
-                        val latLng = LatLng(it.coordinates.latitude,it.coordinates.longitude)
+            googleMap.setOnMapClickListener {
+                //"40.814564", "-74.220654"
+                viewModel.getYelpBusinesses("Bearer $API_KEY", it.latitude.toString(),it.longitude.toString()).observe(viewLifecycleOwner,
+                    Observer {
+                        Log.i("MainActivity","$it")
+                        googleMap.clear()
+                    })
+            }
+        }
+
+
+        viewModel.readAllBusinesses.observe(viewLifecycleOwner, Observer {
+            val boundsBuilder = LatLngBounds.Builder()
+
+            it.forEach {yelp->
+                val latLng = LatLng(yelp.coordinates.latitude,yelp.coordinates.longitude)
 //                    googleMap.addMarker(MarkerOptions().position(latLng).title("Marker in Sydney"))
 //                    googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
 
-                        boundsBuilder.include(latLng)
-                        googleMap.addMarker(MarkerOptions().position(latLng).title("${it.name}")).tag = it
-                        googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 1000, 1000, 0))
+                boundsBuilder.include(latLng)
+                googleMap.addMarker(MarkerOptions().position(latLng).title("${yelp.name}")).tag = yelp
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(), 1000, 1000, 0))
 
-                    }
-                })
-        }
+            }
+
+
+        })
 
 //        viewModel.getYelpBusinesses("Bearer $API_KEY", "40.814564", "-74.220654").observe(viewLifecycleOwner,
 //            Observer {
@@ -83,8 +100,9 @@ class MapFragment : Fragment() {
 
         googleMap.setOnMarkerClickListener(object : GoogleMap.OnMarkerClickListener{
             override fun onMarkerClick(p0: Marker?): Boolean {
-                if (p0?.tag is YelpRestaurant ){
-                    val action = MapFragmentDirections.actionMapFragmentToDetailsFragment(p0.tag as YelpRestaurant)
+                if (p0?.tag is YelpRestaurant){
+                    val action = MapFragmentDirections
+                        .actionMapFragmentToDetailsFragment(p0.tag as YelpRestaurant)
                     findNavController().navigate(action)
                 }
                 return false
