@@ -12,4 +12,12 @@ interface YelpApi {
         @Query("latitude") lat : String,
         @Query("longitude") lon : String) : YelpResponse
 //    ,@Query("radius") radius :String
+
+
+    @GET("businesses/search")
+    suspend fun searchBusinessesByCategory(
+        @Header("Authorization") authHeader: String,
+        @Query("term") searchTerm: String,
+        @Query("latitude") lat : String,
+        @Query("longitude") lon : String) : YelpResponse
 }

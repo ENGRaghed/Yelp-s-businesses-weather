@@ -42,6 +42,37 @@ class Repository (private val yelpApi: YelpApi, private val weatherApi: WeatherA
         return businesses
     }
 
+
+
+    suspend fun getYelpBusinessesByCategory(Autho : String,term : String,lat:String,lon:String) : List<YelpRestaurant> {
+        businessesDao.deleteAllBusinesses()
+
+        var businesses = yelpApi.searchBusinessesByCategory(Autho,term,lat,lon).businesses
+
+//        var businesses = businessesDao.
+        businessesDao.addBusinesses(*businesses.map {
+            YelpRestaurant(
+                it.yelpId,
+                it.name,
+                it.rating,
+                it.price,
+                it.numReviews,
+                it.distanceInMeters,
+                it.imageUrl,
+                it.categories,
+                it.location,
+                it.coordinates
+            )
+
+        }.toTypedArray()
+        )
+
+
+
+        return businesses
+    }
+
+
     suspend fun getWeather(key: String,latlon : String,days : String): Weather {
         return weatherApi.getCurrentWeather(key,latlon,days)
     }

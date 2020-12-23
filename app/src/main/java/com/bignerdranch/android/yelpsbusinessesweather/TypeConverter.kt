@@ -4,12 +4,10 @@ import androidx.room.TypeConverter
 import com.bignerdranch.android.yelpsbusinessesweather.model.Coordinates
 import com.bignerdranch.android.yelpsbusinessesweather.model.YelpCategory
 import com.bignerdranch.android.yelpsbusinessesweather.model.YelpLocation
-import com.google.android.gms.maps.model.LatLng
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class TypeConverter {
-
     @TypeConverter
     fun toList(title: String): List<YelpCategory> {
         val gson = Gson()
@@ -43,5 +41,4 @@ class TypeConverter {
     fun fromObject1(title: Coordinates): String {
         return "${title.latitude},${title.longitude}"
     }
-
 }

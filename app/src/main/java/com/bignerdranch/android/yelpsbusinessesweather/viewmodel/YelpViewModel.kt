@@ -21,6 +21,13 @@ class YelpViewModel : ViewModel() {
         }
         return yelp
     }
+    fun getYelpBusinessesByCategory(Autho : String, term : String ,lat:String,lon:String):LiveData<List<YelpRestaurant>>{
+        val yelp = MutableLiveData<List<YelpRestaurant>>()
+        viewModelScope.launch {
+            yelp.value = repository.getYelpBusinessesByCategory(Autho,term,lat,lon)
+        }
+        return yelp
+    }
 
     fun getCurrentWeather(key : String,latlon : String,days:String):LiveData<Weather>{
         val weather = MutableLiveData<Weather>()

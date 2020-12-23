@@ -87,4 +87,13 @@ dependencies {
     kapt "androidx.room:room-compiler:2.2.5"
     implementation "androidx.room:room-ktx:2.2.5"
     androidTestImplementation "androidx.room:room-testing:2.2.5"
+
+
+    // Preferences DataStore
+    implementation "androidx.datastore:datastore-preferences:1.0.0-alpha05"
+
+    //Glide
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 }
+
