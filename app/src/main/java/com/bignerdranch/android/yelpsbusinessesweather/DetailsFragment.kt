@@ -5,14 +5,17 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.bignerdranch.android.yelpsbusinessesweather.model.DayPlan
+import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.DayPlanViewModel
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.YelpViewModel
-import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.squareup.picasso.Picasso
 
@@ -21,6 +24,7 @@ private const val API_KEY = "843eaebc6a294b4593b190359201612"
 class DetailsFragment : BottomSheetDialogFragment() {
 
     private lateinit var  viewModel : YelpViewModel
+    private lateinit var  dayPlanViewModel : DayPlanViewModel
 
     private val args by navArgs<DetailsFragmentArgs>()
     override fun onCreateView(
@@ -31,6 +35,7 @@ class DetailsFragment : BottomSheetDialogFragment() {
         val view =  inflater.inflate(R.layout.fragment_details, container, false)
 
         viewModel= ViewModelProvider(this).get(YelpViewModel::class.java)
+        dayPlanViewModel = ViewModelProvider(this).get(DayPlanViewModel::class.java)
 
 
         val name= view.findViewById<TextView>(R.id.tvName)
@@ -47,6 +52,29 @@ class DetailsFragment : BottomSheetDialogFragment() {
         val imageState1 = view.findViewById<ImageView>(R.id.state_1)
         val imageState2 = view.findViewById<ImageView>(R.id.state_2)
         val imageState3 = view.findViewById<ImageView>(R.id.state_3)
+        val addDayPlanButton = view.findViewById<Button>(R.id.add_day_plan)
+
+        addDayPlanButton.setOnClickListener {
+            val action = DetailsFragmentDirections
+                .actionDetailsFragmentToAddDayPlanFragment(
+                    args.yelp.yelpId.toString(),
+                    "${args.yelp.coordinates.latitude},${args.yelp.coordinates.longitude}")
+            findNavController().navigate(action)
+//            dayPlanViewModel.addDayPlan(DayPlan(
+//                0,
+//                args.yelp.name,
+//                args.yelp.rating,
+//                args.yelp.price,
+//                args.yelp.numReviews,
+//                args.yelp.distanceInMeters,
+//                args.yelp.imageUrl,
+//                args.yelp.categories,
+//                args.yelp.location,
+//                args.yelp.coordinates,
+//                "day plan 1"
+//            ))
+        }
+
 
 
 
@@ -83,13 +111,13 @@ class DetailsFragment : BottomSheetDialogFragment() {
 
         })
 
-        name.text = args.yelp.name
+        name.text = args.yelp.name?:""
         ratingBar.rating = args.yelp.rating.toFloat()
         tvNumReviews.text = "${args.yelp.numReviews} Reviews"
         address.text = args.yelp.location.address
         Category.text = args.yelp.categories[0].title
         tvPrice.text = args.yelp.price
-        Picasso.get().load(args.yelp.imageUrl).into(image)
+        Picasso.get().load(args.yelp.imageUrl).placeholder(R.drawable.wind).error(R.drawable.sunrise).into(image)
         Log.i("yelp_image",args.yelp.imageUrl)
 
 

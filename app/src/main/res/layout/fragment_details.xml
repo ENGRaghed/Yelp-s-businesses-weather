@@ -89,12 +89,13 @@
         tools:text="$$" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
 
-        android:weightSum="3">
+        android:weightSum="3"
+        app:layout_constraintTop_toBottomOf="@+id/imageView">
 
         <LinearLayout
             android:layout_width="0dp"
@@ -209,8 +210,18 @@
         </LinearLayout>
     </LinearLayout>
 
-
-
+    <Button
+        android:id="@+id/add_day_plan"
+        android:layout_width="59dp"
+        android:layout_height="39dp"
+        android:text="+"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.843"
+        app:layout_constraintStart_toEndOf="@+id/tvAddress"
+        app:layout_constraintTop_toTopOf="@+id/tvNumReviews"
+        app:layout_constraintVertical_bias="0.625" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

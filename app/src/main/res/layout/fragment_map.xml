@@ -42,33 +42,45 @@
 
     <!--        tools:layout_editor_absoluteX="323dp" />-->
 
-        <fragment
-            android:id="@+id/map"
-            android:name="com.google.android.gms.maps.SupportMapFragment"
-            android:layout_width="406dp"
-            android:layout_height="642dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.4"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerView"
-            tools:context=".MapFragment" />
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="406dp"
+        android:layout_height="642dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView"
+        tools:context=".MapFragment" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-<!--    <fragment-->
-<!--        android:id="@+id/map"-->
-<!--        android:name="com.google.android.gms.maps.SupportMapFragment"-->
-<!--        android:layout_width="406dp"-->
-<!--        android:layout_height="642dp"-->
-<!--        tools:context=".MapFragment"-->
-<!--        tools:layout_editor_absoluteX="2dp"-->
-<!--        tools:layout_editor_absoluteY="94dp" />-->
+    <Button
+        android:id="@+id/plan_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.88"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.919" />
+
+    <!--    <fragment-->
+    <!--        android:id="@+id/map"-->
+    <!--        android:name="com.google.android.gms.maps.SupportMapFragment"-->
+    <!--        android:layout_width="406dp"-->
+    <!--        android:layout_height="642dp"-->
+    <!--        tools:context=".MapFragment"-->
+    <!--        tools:layout_editor_absoluteX="2dp"-->
+    <!--        tools:layout_editor_absoluteY="94dp" />-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

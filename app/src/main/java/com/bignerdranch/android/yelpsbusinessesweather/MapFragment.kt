@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.annotation.DrawableRes
@@ -78,7 +79,7 @@ class MapFragment : Fragment() {
                 boundsBuilder.include(latLng)
                 googleMap.addMarker(MarkerOptions()
                         .position(latLng)
-                        .title("${yelp.name}")
+                        .title(yelp.name)
 //                        .snippet("Population: 4,137,400")
 //                        .icon(BitmapDescriptorFactory.fromBitmap(customMarker(bm)))
                 ).tag = yelp
@@ -144,6 +145,12 @@ class MapFragment : Fragment() {
         TypesList.add(Type("resturent",R.drawable.ic_restaurant))
         TypesList.add(Type("Museums",R.drawable.ic_museum))
         TypesList.add(Type("gym",R.drawable.ic_sports))
+
+        val dayPlansButton = view.findViewById<Button>(R.id.plan_button)
+        dayPlansButton.setOnClickListener {
+            val action = MapFragmentDirections.actionMapFragmentToDayPlansListFragment()
+            findNavController().navigate(action)
+        }
 
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)

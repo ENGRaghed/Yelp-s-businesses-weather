@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.bignerdranch.android.yelpsbusinessesweather.network.WeatherApi
 import com.bignerdranch.android.yelpsbusinessesweather.network.YelpApi
+import com.bignerdranch.android.yelpsbusinessesweather.repository.DayPlanRepository
 import com.bignerdranch.android.yelpsbusinessesweather.repository.Repository
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -54,6 +55,12 @@ object ServiceLocator {
 
     val repository : Repository by lazy {
         Repository(yelpApi, weatherApi, businessesDatabase.businessesDao())
+    }
+
+    val dayPlanRepository : DayPlanRepository by lazy {
+        DayPlanRepository(
+            businessesDatabase.daoDayPlan()
+        )
     }
 
 }

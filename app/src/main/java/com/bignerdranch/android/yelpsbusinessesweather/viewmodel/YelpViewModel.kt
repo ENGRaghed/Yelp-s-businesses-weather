@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bignerdranch.android.yelpsbusinessesweather.ServiceLocator
+import com.bignerdranch.android.yelpsbusinessesweather.model.DayPlan
 import com.bignerdranch.android.yelpsbusinessesweather.model.Weather
 import com.bignerdranch.android.yelpsbusinessesweather.model.YelpRestaurant
 import kotlinx.coroutines.launch
@@ -36,6 +37,12 @@ class YelpViewModel : ViewModel() {
         }
         return weather
     }
+    fun readBusinesse(id: String):LiveData<YelpRestaurant>{
+        return repository.readBusinesse(id)
+    }
+
+
+
 
 
 }

@@ -6,6 +6,7 @@ import com.bignerdranch.android.yelpsbusinessesweather.model.YelpCategory
 import com.bignerdranch.android.yelpsbusinessesweather.model.YelpLocation
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import java.util.*
 
 class TypeConverter {
     @TypeConverter
@@ -40,5 +41,14 @@ class TypeConverter {
     @TypeConverter
     fun fromObject1(title: Coordinates): String {
         return "${title.latitude},${title.longitude}"
+    }
+
+    @TypeConverter
+    fun fromDate(date: Date?): Long? {
+        return date?.time }
+    @TypeConverter
+    fun toDate(millisSinceEpoch: Long?): Date? {
+        return millisSinceEpoch?.let {
+            Date(it) }
     }
 }

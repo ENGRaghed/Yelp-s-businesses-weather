@@ -2,6 +2,7 @@ package com.bignerdranch.android.yelpsbusinessesweather.repository
 
 import androidx.lifecycle.LiveData
 import com.bignerdranch.android.yelpsbusinessesweather.Dao
+import com.bignerdranch.android.yelpsbusinessesweather.model.DayPlan
 import com.bignerdranch.android.yelpsbusinessesweather.model.Weather
 import com.bignerdranch.android.yelpsbusinessesweather.model.YelpRestaurant
 import com.bignerdranch.android.yelpsbusinessesweather.network.WeatherApi
@@ -76,5 +77,27 @@ class Repository (private val yelpApi: YelpApi, private val weatherApi: WeatherA
     suspend fun getWeather(key: String,latlon : String,days : String): Weather {
         return weatherApi.getCurrentWeather(key,latlon,days)
     }
+
+    fun readBusinesse(id : String) : LiveData<YelpRestaurant>{
+        return businessesDao.readBusinesse(id)
+    }
+
+//    suspend fun addDayPlan(dayPlan: DayPlan){
+//        businessesDao.addDayPlan(dayPlan)
+//    }
+//
+//    suspend fun deleteDayPlan(dayPlan: DayPlan){
+//        businessesDao.deleteDayPlan(dayPlan)
+//    }
+//    suspend fun updateDayPlan(dayPlan: DayPlan){
+//        businessesDao.updateDayPlan(dayPlan)
+//    }
+//
+//    fun readAllDayPlan() : LiveData<List<DayPlan>> {
+//        return businessesDao.readAllDayPlans()
+//    }
+//    suspend fun readDayPlan(id : Int) : LiveData<DayPlan> {
+//       return businessesDao.readDayPlan(id)
+//    }
 
 }
