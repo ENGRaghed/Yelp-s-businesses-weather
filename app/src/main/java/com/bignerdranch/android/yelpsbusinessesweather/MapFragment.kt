@@ -146,11 +146,11 @@ class MapFragment : Fragment() {
         TypesList.add(Type("Museums",R.drawable.ic_museum))
         TypesList.add(Type("gym",R.drawable.ic_sports))
 
-        val dayPlansButton = view.findViewById<Button>(R.id.plan_button)
-        dayPlansButton.setOnClickListener {
-            val action = MapFragmentDirections.actionMapFragmentToDayPlansListFragment()
-            findNavController().navigate(action)
-        }
+//        val dayPlansButton = view.findViewById<Button>(R.id.plan_button)
+//        dayPlansButton.setOnClickListener {
+//            val action = MapFragmentDirections.actionMapFragmentToDayPlansListFragment()
+//            findNavController().navigate(action)
+//        }
 
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)

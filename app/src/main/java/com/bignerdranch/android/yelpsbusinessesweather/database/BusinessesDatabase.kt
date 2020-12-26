@@ -1,9 +1,9 @@
-package com.bignerdranch.android.yelpsbusinessesweather
+package com.bignerdranch.android.yelpsbusinessesweather.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.bignerdranch.android.yelpsbusinessesweather.model.BusinessesWeather
+import com.bignerdranch.android.yelpsbusinessesweather.TypeConverter
 import com.bignerdranch.android.yelpsbusinessesweather.model.DayPlan
 import com.bignerdranch.android.yelpsbusinessesweather.model.YelpRestaurant
 

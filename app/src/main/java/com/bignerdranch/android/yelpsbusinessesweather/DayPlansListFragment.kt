@@ -1,17 +1,23 @@
 package com.bignerdranch.android.yelpsbusinessesweather
 
+import android.app.AlertDialog
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bignerdranch.android.yelpsbusinessesweather.model.DayPlan
-import com.bignerdranch.android.yelpsbusinessesweather.model.Type
+import com.bignerdranch.android.yelpsbusinessesweather.swipe.MyButton
+import com.bignerdranch.android.yelpsbusinessesweather.swipe.MyButtonClickListener
+import com.bignerdranch.android.yelpsbusinessesweather.swipe.MySwipeHelper
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.DayPlanViewModel
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.day_plan_item.view.*
@@ -45,7 +51,52 @@ class DayPlansListFragment : Fragment() {
         recyclerView.adapter = adapter
 
 
-        return view
+        //add swipe
+
+        val swipe = object : MySwipeHelper(requireContext(),recyclerView,200) {
+            override fun instantiateMyButton(
+                viewHolder: RecyclerView.ViewHolder,
+                buffer: MutableList<MyButton>
+            ) {
+                //add button
+                buffer.add(
+                    MyButton(requireContext(),
+                        "delete",
+                        30,
+                        R.drawable.ic_delete_24,
+                        Color.parseColor("#FF3c30"),
+                        object :
+                            MyButtonClickListener {
+                            override fun onClick(pos: Int) {
+                                deleteDayPlan(adapter.dayPlans[pos])
+                            }
+                        })
+                )
+
+                //edit button
+                buffer.add(
+                    MyButton(requireContext(),
+                        "edit",
+                        30,
+                        R.drawable.ic_edit_white_24,
+                        Color.parseColor("#FF9502"),
+                        object :
+                            MyButtonClickListener {
+                            override fun onClick(pos: Int) {
+
+                                val action =
+                                    DayPlansListFragmentDirections
+                                        .actionDayPlansListFragmentToEditDayPlanFragment(adapter.dayPlans[pos].dayPlanId.toString())
+                                findNavController().navigate(action)
+                            }
+                        })
+                )
+
+            }
+
+        }
+
+                return view
     }
 
 
@@ -80,6 +131,20 @@ class DayPlansListFragment : Fragment() {
             notifyDataSetChanged()
         }
 
+    }
+
+    private fun deleteDayPlan(dayPlan: DayPlan){
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setPositiveButton("yes"){_, _ ->
+            dayPlanViewModel.deleteDayPlan(dayPlan)
+            Toast.makeText(requireContext(),"deleted ${dayPlan.name}", Toast.LENGTH_SHORT).show()
+        }
+        builder.setNegativeButton("no"){_, _ ->
+
+        }
+        builder.setTitle("delete ${dayPlan.name}")
+        builder.setMessage("are you want to delete ${dayPlan.name} ?")
+        builder.create().show()
     }
 
 

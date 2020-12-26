@@ -1,4 +1,4 @@
-package com.bignerdranch.android.yelpsbusinessesweather
+package com.bignerdranch.android.yelpsbusinessesweather.database
 
 import androidx.lifecycle.LiveData
 import androidx.room.*

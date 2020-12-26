@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bignerdranch.android.yelpsbusinessesweather.model.DayPlan
 import com.bignerdranch.android.yelpsbusinessesweather.model.YelpLocation
@@ -113,6 +114,10 @@ class AddDayPlanFragment : Fragment(),DatePickerFragment.Callbacks {
             description,
                 date
             ))
+            Toast.makeText(requireContext(),"add ${businesse.name} successful",Toast.LENGTH_SHORT).show()
+
+            val action = AddDayPlanFragmentDirections.actionAddDayPlanFragmentToDayPlansListFragment()
+            findNavController().navigate(action)
 
         }
 

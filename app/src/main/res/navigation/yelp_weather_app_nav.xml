@@ -40,6 +40,12 @@
         <action
             android:id="@+id/action_dayPlansListFragment_to_mapFragment"
             app:destination="@id/mapFragment" />
+        <action
+            android:id="@+id/action_dayPlansListFragment_to_editDayPlanFragment"
+            app:destination="@id/editDayPlanFragment" />
+        <action
+            android:id="@+id/action_dayPlansListFragment_to_addDayPlanFragment"
+            app:destination="@id/addDayPlanFragment" />
     </fragment>
     <fragment
         android:id="@+id/addDayPlanFragment"
@@ -54,6 +60,21 @@
             app:destination="@id/detailsFragment" />
         <argument
             android:name="latLng"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_addDayPlanFragment_to_dayPlansListFragment"
+            app:destination="@id/dayPlansListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editDayPlanFragment"
+        android:name="com.bignerdranch.android.yelpsbusinessesweather.EditDayPlanFragment"
+        android:label="fragment_edit_day_plan"
+        tools:layout="@layout/fragment_edit_day_plan" >
+        <action
+            android:id="@+id/action_editDayPlanFragment_to_dayPlansListFragment"
+            app:destination="@id/dayPlansListFragment" />
+        <argument
+            android:name="id"
             app:argType="string" />
     </fragment>
 </navigation>

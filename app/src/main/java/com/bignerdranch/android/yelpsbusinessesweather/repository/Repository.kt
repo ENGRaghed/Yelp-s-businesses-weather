@@ -1,8 +1,7 @@
 package com.bignerdranch.android.yelpsbusinessesweather.repository
 
 import androidx.lifecycle.LiveData
-import com.bignerdranch.android.yelpsbusinessesweather.Dao
-import com.bignerdranch.android.yelpsbusinessesweather.model.DayPlan
+import com.bignerdranch.android.yelpsbusinessesweather.database.Dao
 import com.bignerdranch.android.yelpsbusinessesweather.model.Weather
 import com.bignerdranch.android.yelpsbusinessesweather.model.YelpRestaurant
 import com.bignerdranch.android.yelpsbusinessesweather.network.WeatherApi

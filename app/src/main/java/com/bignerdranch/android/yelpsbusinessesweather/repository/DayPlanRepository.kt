@@ -1,7 +1,7 @@
 package com.bignerdranch.android.yelpsbusinessesweather.repository
 
 import androidx.lifecycle.LiveData
-import com.bignerdranch.android.yelpsbusinessesweather.DaoDayPlan
+import com.bignerdranch.android.yelpsbusinessesweather.database.DaoDayPlan
 import com.bignerdranch.android.yelpsbusinessesweather.model.DayPlan
 
 class DayPlanRepository (private val daoDayPlan: DaoDayPlan){
