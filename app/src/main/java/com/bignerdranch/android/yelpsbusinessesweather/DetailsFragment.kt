@@ -13,11 +13,16 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.DefaultItemAnimator
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bignerdranch.android.yelpsbusinessesweather.model.DayPlan
+import com.bignerdranch.android.yelpsbusinessesweather.model.Hour
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.DayPlanViewModel
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.YelpViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.hour_item.view.*
 
 private const val API_KEY = "843eaebc6a294b4593b190359201612"
 
@@ -25,6 +30,8 @@ class DetailsFragment : BottomSheetDialogFragment() {
 
     private lateinit var  viewModel : YelpViewModel
     private lateinit var  dayPlanViewModel : DayPlanViewModel
+    private lateinit var adapter: ForecastHourAdapter
+
 
     private val args by navArgs<DetailsFragmentArgs>()
     override fun onCreateView(
@@ -36,6 +43,14 @@ class DetailsFragment : BottomSheetDialogFragment() {
 
         viewModel= ViewModelProvider(this).get(YelpViewModel::class.java)
         dayPlanViewModel = ViewModelProvider(this).get(DayPlanViewModel::class.java)
+
+        val recyclerView = view.findViewById<RecyclerView>(R.id.rv_hours)
+        adapter = ForecastHourAdapter()
+        val mLayoutManager = LinearLayoutManager(context)
+        mLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
+        recyclerView.layoutManager = mLayoutManager
+        recyclerView.itemAnimator = DefaultItemAnimator()
+        recyclerView.adapter = adapter
 
 
         val name= view.findViewById<TextView>(R.id.tvName)
@@ -60,19 +75,6 @@ class DetailsFragment : BottomSheetDialogFragment() {
                     args.yelp.yelpId.toString(),
                     "${args.yelp.coordinates.latitude},${args.yelp.coordinates.longitude}")
             findNavController().navigate(action)
-//            dayPlanViewModel.addDayPlan(DayPlan(
-//                0,
-//                args.yelp.name,
-//                args.yelp.rating,
-//                args.yelp.price,
-//                args.yelp.numReviews,
-//                args.yelp.distanceInMeters,
-//                args.yelp.imageUrl,
-//                args.yelp.categories,
-//                args.yelp.location,
-//                args.yelp.coordinates,
-//                "day plan 1"
-//            ))
         }
 
 
@@ -81,6 +83,8 @@ class DetailsFragment : BottomSheetDialogFragment() {
         viewModel.getCurrentWeather(API_KEY,
             "${args.yelp.coordinates.latitude},${args.yelp.coordinates.longitude}",
             "5").observe(viewLifecycleOwner, Observer {
+
+            adapter.setData(it.forecast.forecastday[0].hour)
             Distance.text = "${it.current.temp_c}°C"
             day_1_temp.text = "${it.forecast.forecastday[0].day.avgtemp_c}°C"
             day_2_temp.text = "${it.forecast.forecastday[1].day.avgtemp_c}°C"
@@ -97,13 +101,6 @@ class DetailsFragment : BottomSheetDialogFragment() {
                     .placeholder(R.drawable.wind).error(R.drawable.sunrise).into(imageState3)
             Log.i("image3","https://${it.forecast.forecastday[2].day.condition.icon}")
 
-//            val r=it.forecast.forecastday[0].day.condition.icon.split("/")
-//            val l = r.last()
-//
-//
-//            Log.i("image",l)
-//            Log.i("image link",it.forecast.forecastday[1].day.condition.icon)
-//            Log.i("image link",it.forecast.forecastday[2].day.condition.icon)
 
 
 
@@ -125,5 +122,45 @@ class DetailsFragment : BottomSheetDialogFragment() {
 
         return view
     }
+
+    inner class ForecastHourAdapter() :
+        RecyclerView.Adapter<ForecastHourAdapter.ForecastHourViewHolder>() {
+
+        lateinit var hour: Hour
+        var hours = emptyList<Hour>()
+
+        inner class ForecastHourViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForecastHourViewHolder {
+            val view : View = LayoutInflater.from(parent.context).inflate(R.layout.hour_item,parent,false)
+            return ForecastHourViewHolder(view)
+        }
+
+        override fun getItemCount(): Int {
+            return hours.size
+        }
+
+        override fun onBindViewHolder(holder: ForecastHourViewHolder, position: Int) {
+            hour = hours[position]
+            if (position < 12){
+                holder.itemView.time_hour.text = "$position am"
+            }else{
+                holder.itemView.time_hour.text = "$position pm"
+
+            }
+            Picasso.get().load("https://${hour.condition.icon}")
+                .placeholder(R.drawable.wind).error(R.drawable.sunrise).into(holder.itemView.imageView3)
+            holder.itemView.temp_c.text = "${hour.temp_c}°C"
+
+        }
+        fun setData(hours: List<Hour>){
+            this.hours = hours
+            notifyDataSetChanged()
+        }
+
+    }
+
 
 }
