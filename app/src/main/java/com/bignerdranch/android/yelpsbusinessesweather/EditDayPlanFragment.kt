@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bignerdranch.android.yelpsbusinessesweather.model.DayPlan
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.DayPlanViewModel
+import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.DayPlanViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_add_day_plan.*
@@ -25,6 +26,7 @@ class EditDayPlanFragment : Fragment(),DatePickerFragment.Callbacks {
 
     private val args by navArgs<EditDayPlanFragmentArgs>()
     private lateinit var dayPlanViewModel: DayPlanViewModel
+    private lateinit var dayPlanViewModelFactory: DayPlanViewModelFactory
     private lateinit var dayPlan: DayPlan
 
     override fun onCreateView(
@@ -43,7 +45,8 @@ class EditDayPlanFragment : Fragment(),DatePickerFragment.Callbacks {
         val noteTv = view.findViewById<EditText>(R.id.note)
 
 
-        dayPlanViewModel = ViewModelProvider(this).get(DayPlanViewModel::class.java)
+        dayPlanViewModelFactory = DayPlanViewModelFactory(ServiceLocator.dayPlanRepository)
+        dayPlanViewModel = ViewModelProvider(this,dayPlanViewModelFactory).get(DayPlanViewModel::class.java)
         dayPlanViewModel.readDayPlan(args.id).observe(viewLifecycleOwner, Observer {
             setDayPlan(it)
             Picasso.get().load(it.imageUrl).fit().centerCrop().into(image)

@@ -10,6 +10,71 @@ data class Current(
             val cloud: Int,
             val condition: Condition,
             val feelslike_c: Double,
+            val gust_kph: Double,
+            val gust_mph: Double,
+            val humidity: Int,
+            val is_day: Int,
+            val last_updated: String,
+            val last_updated_epoch: Int,
+            val temp_c: Double,
+            val wind_degree: Int
+)
+
+
+data class Forecast(
+        val forecastday: List<Forecastday>
+)
+data class Forecastday(
+    val date: String,
+    val date_epoch: Int,
+    val day: Day,
+    val hour: List<Hour>
+)
+
+
+data class Day(
+    val avgtemp_c: Double,//*
+    val condition: Condition,//*
+    val daily_chance_of_rain: String,
+    val daily_chance_of_snow: String,
+    val maxtemp_c: Double,
+    val mintemp_c: Double
+)
+data class Hour(
+    val chance_of_rain: String,
+    val chance_of_snow: String,
+    val condition: Condition,//*
+    val temp_c: Double, //*
+    val time: String,//*
+    val time_epoch: Int
+)
+
+data class Condition(
+        val icon: String,
+        val text: String
+)
+
+data class Location(
+        val country: String,
+        val lat: Double,
+        val localtime: String,
+        val localtime_epoch: Int, //
+        val lon: Double,
+        val name: String,
+        val region: String
+)
+
+/*
+data class Weather(
+        val current: Current,
+        val forecast: Forecast,
+        val location: Location
+)
+
+data class Current(
+            val cloud: Int,
+            val condition: Condition,
+            val feelslike_c: Double,
             val feelslike_f: Double,
             val gust_kph: Double,
             val gust_mph: Double,
@@ -126,3 +191,5 @@ data class Location(
         val tz_id: String
 )
 
+
+ */

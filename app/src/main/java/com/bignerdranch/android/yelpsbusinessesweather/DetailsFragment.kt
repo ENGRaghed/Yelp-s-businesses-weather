@@ -20,6 +20,7 @@ import com.bignerdranch.android.yelpsbusinessesweather.model.DayPlan
 import com.bignerdranch.android.yelpsbusinessesweather.model.Hour
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.DayPlanViewModel
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.YelpViewModel
+import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.YelpViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.hour_item.view.*
@@ -28,8 +29,9 @@ private const val API_KEY = "843eaebc6a294b4593b190359201612"
 
 class DetailsFragment : BottomSheetDialogFragment() {
 
+    private lateinit var  viewModelFactory : YelpViewModelFactory
     private lateinit var  viewModel : YelpViewModel
-    private lateinit var  dayPlanViewModel : DayPlanViewModel
+//    private lateinit var  dayPlanViewModel : DayPlanViewModel
     private lateinit var adapter: ForecastHourAdapter
 
 
@@ -41,8 +43,9 @@ class DetailsFragment : BottomSheetDialogFragment() {
         // Inflate the layout for this fragment
         val view =  inflater.inflate(R.layout.fragment_details, container, false)
 
-        viewModel= ViewModelProvider(this).get(YelpViewModel::class.java)
-        dayPlanViewModel = ViewModelProvider(this).get(DayPlanViewModel::class.java)
+        viewModelFactory = YelpViewModelFactory(ServiceLocator.repository)
+        viewModel= ViewModelProvider(this,viewModelFactory).get(YelpViewModel::class.java)
+//        dayPlanViewModel = ViewModelProvider(this).get(DayPlanViewModel::class.java)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.rv_hours)
         adapter = ForecastHourAdapter()

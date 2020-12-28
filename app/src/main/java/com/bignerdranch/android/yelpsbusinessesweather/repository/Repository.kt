@@ -7,14 +7,14 @@ import com.bignerdranch.android.yelpsbusinessesweather.model.YelpRestaurant
 import com.bignerdranch.android.yelpsbusinessesweather.network.WeatherApi
 import com.bignerdranch.android.yelpsbusinessesweather.network.YelpApi
 
-class Repository (private val yelpApi: YelpApi, private val weatherApi: WeatherApi , private val businessesDao: Dao){
+class Repository (private val yelpApi: YelpApi, private val weatherApi: WeatherApi, private val businessesDao: Dao) : IRepository {
 
 
 
-    val readAllBusinesses : LiveData<List<YelpRestaurant>> = businessesDao.readAllBusinesses()
+    override val readAllBusinesses : LiveData<List<YelpRestaurant>> = businessesDao.readAllBusinesses()
 
 
-    suspend fun getYelpBusinesses(Autho : String,lat:String,lon:String) : List<YelpRestaurant> {
+    override suspend fun getYelpBusinesses(Autho : String, lat:String, lon:String) : List<YelpRestaurant> {
         businessesDao.deleteAllBusinesses()
 
         var businesses = yelpApi.searchRestaurants(Autho,lat,lon).businesses
@@ -44,7 +44,7 @@ class Repository (private val yelpApi: YelpApi, private val weatherApi: WeatherA
 
 
 
-    suspend fun getYelpBusinessesByCategory(Autho : String,term : String,lat:String,lon:String) : List<YelpRestaurant> {
+    override suspend fun getYelpBusinessesByCategory(Autho : String, term : String, lat:String, lon:String) : List<YelpRestaurant> {
         businessesDao.deleteAllBusinesses()
 
         var businesses = yelpApi.searchBusinessesByCategory(Autho,term,lat,lon).businesses
@@ -73,11 +73,11 @@ class Repository (private val yelpApi: YelpApi, private val weatherApi: WeatherA
     }
 
 
-    suspend fun getWeather(key: String,latlon : String,days : String): Weather {
+    override suspend fun getWeather(key: String, latlon : String, days : String): Weather {
         return weatherApi.getCurrentWeather(key,latlon,days)
     }
 
-    fun readBusinesse(id : String) : LiveData<YelpRestaurant>{
+    override fun readBusinesse(id : String) : LiveData<YelpRestaurant>{
         return businessesDao.readBusinesse(id)
     }
 

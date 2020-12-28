@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bignerdranch.android.yelpsbusinessesweather.model.Type
 import com.bignerdranch.android.yelpsbusinessesweather.model.YelpRestaurant
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.YelpViewModel
+import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.YelpViewModelFactory
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -40,6 +41,7 @@ private const val TYPE_KEY = "Type"
 
 class MapFragment : Fragment() {
 
+    private lateinit var  viewModelFactory : YelpViewModelFactory
     private lateinit var  viewModel : YelpViewModel
     private lateinit var latLng: LatLng
     private lateinit var adapter: TypeAdapter
@@ -65,7 +67,8 @@ class MapFragment : Fragment() {
         val sydney = LatLng(-34.0, 151.0)
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
 
-        viewModel= ViewModelProvider(this).get(YelpViewModel::class.java)
+        viewModelFactory = YelpViewModelFactory(ServiceLocator.repository)
+        viewModel= ViewModelProvider(this,viewModelFactory).get(YelpViewModel::class.java)
 
         viewModel.readAllBusinesses.observe(viewLifecycleOwner, Observer {
             googleMap.clear()

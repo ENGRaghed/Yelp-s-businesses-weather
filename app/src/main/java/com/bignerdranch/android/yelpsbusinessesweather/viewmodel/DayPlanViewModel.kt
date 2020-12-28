@@ -6,10 +6,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.bignerdranch.android.yelpsbusinessesweather.ServiceLocator
 import com.bignerdranch.android.yelpsbusinessesweather.model.DayPlan
+import com.bignerdranch.android.yelpsbusinessesweather.repository.DayPlanRepository
+import com.bignerdranch.android.yelpsbusinessesweather.repository.IDayPlanRepository
 import kotlinx.coroutines.launch
 
-class DayPlanViewModel : ViewModel(){
-    val repository = ServiceLocator.dayPlanRepository
+class DayPlanViewModel(private val repository : IDayPlanRepository) : ViewModel(){
+//    val repository = ServiceLocator.dayPlanRepository
 
     fun addDayPlan(dayPlan: DayPlan){
         viewModelScope.launch {
@@ -22,7 +24,7 @@ class DayPlanViewModel : ViewModel(){
             repository.deleteDayPlan(dayPlan)
         }
     }
-    fun updateDayPlan(dayPlan: DayPlan){
+    fun updateDayPlan(dayPlan: DayPlan)  {
         viewModelScope.launch {
             repository.updateDayPlan(dayPlan)
         }
@@ -33,5 +35,6 @@ class DayPlanViewModel : ViewModel(){
     }
 
     val readAllDayPlan : LiveData<List<DayPlan>> = repository.readAllDayPlan()
+
 
 }

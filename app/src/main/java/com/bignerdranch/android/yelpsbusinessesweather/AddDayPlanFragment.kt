@@ -14,7 +14,9 @@ import com.bignerdranch.android.yelpsbusinessesweather.model.DayPlan
 import com.bignerdranch.android.yelpsbusinessesweather.model.YelpLocation
 import com.bignerdranch.android.yelpsbusinessesweather.model.YelpRestaurant
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.DayPlanViewModel
+import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.DayPlanViewModelFactory
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.YelpViewModel
+import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.YelpViewModelFactory
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -34,8 +36,13 @@ private const val REQUEST_DATE = 0
 class AddDayPlanFragment : Fragment(),DatePickerFragment.Callbacks {
 
     private val args by navArgs<AddDayPlanFragmentArgs>()
+
+
     private lateinit var yelpViewModel: YelpViewModel
+    private lateinit var yelpViewModelFactory: YelpViewModelFactory
     private lateinit var dayPlanViewModel: DayPlanViewModel
+    private lateinit var dayPlanViewModelFactory: DayPlanViewModelFactory
+
     lateinit var businesse : YelpRestaurant
     private var date : Date? =null
 
@@ -64,8 +71,13 @@ class AddDayPlanFragment : Fragment(),DatePickerFragment.Callbacks {
         val view = inflater.inflate(R.layout.fragment_add_day_plan, container, false)
 
 
-        yelpViewModel = ViewModelProvider(this).get(YelpViewModel::class.java)
-        dayPlanViewModel = ViewModelProvider(this).get(DayPlanViewModel::class.java)
+            yelpViewModelFactory = YelpViewModelFactory(ServiceLocator.repository)
+            yelpViewModel = ViewModelProvider(this,yelpViewModelFactory).get(YelpViewModel::class.java)
+            
+
+            dayPlanViewModelFactory = DayPlanViewModelFactory(ServiceLocator.dayPlanRepository)
+            dayPlanViewModel = ViewModelProvider(this,dayPlanViewModelFactory)
+                .get(DayPlanViewModel::class.java)
 
             val image = view.findViewById<ImageView>(R.id.businesse_image)
             val datePicker = view.findViewById<Button>(R.id.date_picker)

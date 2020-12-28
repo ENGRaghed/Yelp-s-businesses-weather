@@ -19,12 +19,14 @@ import com.bignerdranch.android.yelpsbusinessesweather.swipe.MyButton
 import com.bignerdranch.android.yelpsbusinessesweather.swipe.MyButtonClickListener
 import com.bignerdranch.android.yelpsbusinessesweather.swipe.MySwipeHelper
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.DayPlanViewModel
+import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.DayPlanViewModelFactory
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.day_plan_item.view.*
 
 class DayPlansListFragment : Fragment() {
 
     private lateinit var dayPlanViewModel: DayPlanViewModel
+    private lateinit var dayPlanViewModelFactory: DayPlanViewModelFactory
     private lateinit var adapter: DayPlanAdapter
 
     override fun onCreateView(
@@ -34,7 +36,10 @@ class DayPlansListFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_day_plans_list, container, false)
 
-        dayPlanViewModel = ViewModelProvider(this).get(DayPlanViewModel::class.java)
+        dayPlanViewModelFactory = DayPlanViewModelFactory(ServiceLocator.dayPlanRepository)
+        dayPlanViewModel = ViewModelProvider(this,dayPlanViewModelFactory)
+            .get(DayPlanViewModel::class.java)
+//        dayPlanViewModel = ViewModelProvider(this).get(DayPlanViewModel::class.java)
 
 
         dayPlanViewModel.readAllDayPlan.observe(viewLifecycleOwner, Observer {
