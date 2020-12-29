@@ -1,5 +1,7 @@
 package com.bignerdranch.android.yelpsbusinessesweather
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -22,6 +24,7 @@ import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.DayPlanViewMode
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.YelpViewModel
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.YelpViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.hour_item.view.*
 
@@ -60,17 +63,20 @@ class DetailsFragment : BottomSheetDialogFragment() {
         val image = view.findViewById<ImageView>(R.id.imageView)
         val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar)
         val tvNumReviews = view.findViewById<TextView>(R.id.tvNumReviews)
-        val address = view.findViewById<TextView>(R.id.tvAddress)
-        val Category = view.findViewById<TextView>(R.id.tvCategory)
-        val Distance = view.findViewById<TextView>(R.id.tvDistance)
-        val tvPrice = view.findViewById<TextView>(R.id.tvPrice)
+//        val address = view.findViewById<TextView>(R.id.tvAddress)
+//        val Category = view.findViewById<TextView>(R.id.tvCategory)
+//        val tvPrice = view.findViewById<TextView>(R.id.tvPrice)
         val day_1_temp = view.findViewById<TextView>(R.id.day_1)
         val day_2_temp = view.findViewById<TextView>(R.id.day_2)
         val day_3_temp = view.findViewById<TextView>(R.id.day_3)
+        val day_1_temp_max = view.findViewById<TextView>(R.id.max_tmp)
+        val day_2_temp_max = view.findViewById<TextView>(R.id.max_tmp2)
+        val day_3_temp_max = view.findViewById<TextView>(R.id.max_tmp3)
         val imageState1 = view.findViewById<ImageView>(R.id.state_1)
         val imageState2 = view.findViewById<ImageView>(R.id.state_2)
         val imageState3 = view.findViewById<ImageView>(R.id.state_3)
-        val addDayPlanButton = view.findViewById<Button>(R.id.add_day_plan)
+        val addDayPlanButton = view.findViewById<FloatingActionButton>(R.id.add_day_plan)
+        val phone = view.findViewById<FloatingActionButton>(R.id.phone)
 
         addDayPlanButton.setOnClickListener {
             val action = DetailsFragmentDirections
@@ -80,6 +86,11 @@ class DetailsFragment : BottomSheetDialogFragment() {
             findNavController().navigate(action)
         }
 
+        phone.setOnClickListener {
+            var intent = Intent(Intent.ACTION_DIAL)
+            intent.setData(Uri.parse("tel:"+args.yelp.phone))
+            startActivity(intent)
+        }
 
 
 
@@ -88,19 +99,21 @@ class DetailsFragment : BottomSheetDialogFragment() {
             "5").observe(viewLifecycleOwner, Observer {
 
             adapter.setData(it.forecast.forecastday[0].hour)
-            Distance.text = "${it.current.temp_c}°C"
             day_1_temp.text = "${it.forecast.forecastday[0].day.avgtemp_c}°C"
             day_2_temp.text = "${it.forecast.forecastday[1].day.avgtemp_c}°C"
             day_3_temp.text = "${it.forecast.forecastday[2].day.avgtemp_c}°C"
-            Picasso.get().load("https://${it.forecast.forecastday[0].day.condition.icon}")
+            day_1_temp_max.text = "${it.forecast.forecastday[0].day.maxtemp_c}°C"
+            day_2_temp_max.text = "${it.forecast.forecastday[1].day.maxtemp_c}°C"
+            day_3_temp_max.text = "${it.forecast.forecastday[2].day.maxtemp_c}°C"
+            Picasso.get().load("https://${it.forecast.forecastday[0].day.condition.icon}").fit().centerCrop()
                     .placeholder(R.drawable.wind).error(R.drawable.sunrise).into(imageState1)
             Log.i("image1","https://${it.forecast.forecastday[0].day.condition.icon}")
 
-            Picasso.get().load("https://${it.forecast.forecastday[1].day.condition.icon}")
+            Picasso.get().load("https://${it.forecast.forecastday[1].day.condition.icon}").fit().centerCrop()
                     .placeholder(R.drawable.wind).error(R.drawable.sunrise).into(imageState2)
             Log.i("image2","https://${it.forecast.forecastday[1].day.condition.icon}")
 
-            Picasso.get().load("https://${it.forecast.forecastday[2].day.condition.icon}")
+            Picasso.get().load("https://${it.forecast.forecastday[2].day.condition.icon}").fit().centerCrop()
                     .placeholder(R.drawable.wind).error(R.drawable.sunrise).into(imageState3)
             Log.i("image3","https://${it.forecast.forecastday[2].day.condition.icon}")
 
@@ -114,11 +127,12 @@ class DetailsFragment : BottomSheetDialogFragment() {
         name.text = args.yelp.name?:""
         ratingBar.rating = args.yelp.rating.toFloat()
         tvNumReviews.text = "${args.yelp.numReviews} Reviews"
-        address.text = args.yelp.location.address
-        Category.text = args.yelp.categories[0].title
-        tvPrice.text = args.yelp.price
-        Picasso.get().load(args.yelp.imageUrl).placeholder(R.drawable.wind).error(R.drawable.sunrise).into(image)
+//        address.text = args.yelp.location.address
+//        Category.text = args.yelp.categories[0].title
+//        tvPrice.text = args.yelp.price
+        Picasso.get().load(args.yelp.imageUrl).fit().centerCrop().into(image)
         Log.i("yelp_image",args.yelp.imageUrl)
+
 
 
 

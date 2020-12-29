@@ -17,7 +17,7 @@ class FakeYelpRepositry : IRepository{
 
     val current = Current(0, Condition("",""),0.0,0.0,0.0,0,0,"",0,0.0,0)
     val hour = listOf(Hour("","",Condition("",""),0.0,"",0),Hour("","",Condition("",""),0.0,"",0))
-    val day = Day(0.0, Condition("",""),"","",1.1,0.0)
+    val day = Day(0.0, Condition("",""),"","",0,0,1.1,0.0)
     val forecastday = listOf<Forecastday>(Forecastday("",123,day,hour),Forecastday("",0,day,hour))
     val forecast = Forecast(forecastday)
     val weather = Weather(current,forecast,Location("",0.0,"",0,0.0,"",""))
@@ -26,19 +26,23 @@ class FakeYelpRepositry : IRepository{
 
 
     val yelpRestaurant1 =YelpRestaurant( 0,
-            "Kim's Sushi", 4.5,
+            "jjjjj","Kim's Sushi",
+            "",
+            4.5,
             "$$",
+            false,
             812,
             3.3,
             "https://s3-media4.fl.yelpcdn.com/bphoto/FU1dpikJj_A49HUTg16smA/o.jpg", category
-            , YelpLocation("458 Eagle Rock Ave"), Coordinates(40.8034302, -74.2490792))
+            , YelpLocation("458 Eagle Rock Ave"), Coordinates(40.8034302, -74.2490792),emptyList<String>())
     val yelpRestaurant2 =YelpRestaurant( 1,
-            "Essex County Turtle Back Zoo", 4.0,
+            "jkjjkj","Essex County Turtle Back Zoo", "",4.0,
             "$$",
+            false,
             331,
             3.3,
             "", category
-            , YelpLocation("458 Eagle Rock Ave"), Coordinates(40.8034302, -74.2490792))
+            , YelpLocation("458 Eagle Rock Ave"), Coordinates(40.8034302, -74.2490792), emptyList<String>())
 
 
     fun add(){

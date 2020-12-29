@@ -37,6 +37,8 @@ data class Day(
     val condition: Condition,//*
     val daily_chance_of_rain: String,
     val daily_chance_of_snow: String,
+    val daily_will_it_rain: Int,
+    val daily_will_it_snow: Int,
     val maxtemp_c: Double,
     val mintemp_c: Double
 )

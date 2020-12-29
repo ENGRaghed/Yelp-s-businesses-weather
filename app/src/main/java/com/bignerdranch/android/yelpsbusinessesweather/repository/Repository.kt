@@ -31,7 +31,8 @@ class Repository (private val yelpApi: YelpApi, private val weatherApi: WeatherA
                 it.imageUrl,
                 it.categories,
                 it.location,
-                it.coordinates
+                it.coordinates,
+                    it.phone
             )
 
         }.toTypedArray()
@@ -61,7 +62,8 @@ class Repository (private val yelpApi: YelpApi, private val weatherApi: WeatherA
                 it.imageUrl,
                 it.categories,
                 it.location,
-                it.coordinates
+                it.coordinates,
+                    it.phone
             )
 
         }.toTypedArray()

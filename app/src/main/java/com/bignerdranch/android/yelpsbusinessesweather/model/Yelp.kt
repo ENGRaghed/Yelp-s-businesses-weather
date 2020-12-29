@@ -20,7 +20,8 @@ data class YelpRestaurant(
     @SerializedName("image_url") val imageUrl: String,
     val categories: List<YelpCategory>,
     val location: YelpLocation,
-    val coordinates: Coordinates
+    val coordinates: Coordinates,
+    var phone:String =""
 ) : Parcelable {
     fun displayDistance(): String {
         val milesPerMeter = 0.000621371

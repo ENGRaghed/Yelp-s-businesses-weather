@@ -4,16 +4,15 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.net.ConnectivityManager
+import android.net.NetworkInfo
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
+import android.view.*
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.annotation.DrawableRes
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -32,11 +31,15 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import kotlinx.coroutines.launch
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.URL
 
 
 private const val API_KEY = "fIK9HGPtNk-VJEAjIM4YyP0sRdeIpG82w6dnYVw_KsVz5c4RT54du50UT5uDakogcu8ism-9EeiEBc9Ca1014bzMMIejU6neWdmo3Zc6NePREOjcoY2XJ_p8SkTaX3Yx"
 private const val LATLNG_KEY = "LatLng"
 private const val TYPE_KEY = "Type"
+private const val LOG_TAG = "LOG_TAG"
 
 
 class MapFragment : Fragment() {
@@ -46,6 +49,7 @@ class MapFragment : Fragment() {
     private lateinit var latLng: LatLng
     private lateinit var adapter: TypeAdapter
     private lateinit var dataStoreProvider: DataStoreProvider
+    private var yelpBusinessesList = emptyList<YelpRestaurant>()
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -133,6 +137,10 @@ class MapFragment : Fragment() {
 
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -305,6 +313,45 @@ class MapFragment : Fragment() {
         } else Math.ceil(resources.displayMetrics.density * value.toDouble()).toInt()
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.businesses_weather_menu,menu)
 
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.will_rain -> {}
+            R.id.will_not_rain ->{}
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+
+    private fun isNetworkAvailable(context: Context): Boolean {
+//        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager = context?.
+        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
+        return activeNetworkInfo != null
+    }
+
+    fun hasActiveInternetConnection(context: Context): Boolean {
+        if (isNetworkAvailable(context)) {
+            try {
+                val urlc: HttpURLConnection = URL("http://www.google.com").openConnection() as HttpURLConnection
+                urlc.setRequestProperty("User-Agent", "Test")
+                urlc.setRequestProperty("Connection", "close")
+                urlc.setConnectTimeout(1500)
+                urlc.connect()
+                return urlc.getResponseCode() === 200
+            } catch (e: IOException) {
+                Log.e(LOG_TAG, "Error checking internet connection", e)
+            }
+        } else {
+            Log.d(LOG_TAG, "No network available!")
+        }
+        return false
+    }
 
 }

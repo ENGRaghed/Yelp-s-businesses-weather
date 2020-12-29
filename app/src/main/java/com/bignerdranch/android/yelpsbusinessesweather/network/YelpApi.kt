@@ -1,7 +1,9 @@
 package com.bignerdranch.android.yelpsbusinessesweather.network
 
+import com.bignerdranch.android.yelpsbusinessesweather.model.YelpRestaurant
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface YelpApi {
@@ -20,4 +22,9 @@ interface YelpApi {
         @Query("term") searchTerm: String,
         @Query("latitude") lat : String,
         @Query("longitude") lon : String) : YelpResponse
+
+    @GET("businesses/search")
+    suspend fun BusinessesDetails(
+            @Path("id") id : String,
+            @Header("Authorization") authHeader: String) : YelpRestaurant
 }
