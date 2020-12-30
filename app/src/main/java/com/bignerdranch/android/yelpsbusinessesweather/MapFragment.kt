@@ -75,6 +75,7 @@ class MapFragment : Fragment() {
         viewModel= ViewModelProvider(this,viewModelFactory).get(YelpViewModel::class.java)
 
         viewModel.readAllBusinesses.observe(viewLifecycleOwner, Observer {
+
             googleMap.clear()
 
             val boundsBuilder = LatLngBounds.Builder()
@@ -87,6 +88,7 @@ class MapFragment : Fragment() {
                 googleMap.addMarker(MarkerOptions()
                         .position(latLng)
                         .title(yelp.name)
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
 //                        .snippet("Population: 4,137,400")
 //                        .icon(BitmapDescriptorFactory.fromBitmap(customMarker(bm)))
                 ).tag = yelp
@@ -137,10 +139,6 @@ class MapFragment : Fragment() {
 
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
-    }
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -221,11 +219,20 @@ class MapFragment : Fragment() {
 //                    }
                     dataStoreProvider.save(TYPE_KEY,types[position].type)
 
-                    if (dataStoreProvider.read(TYPE_KEY).equals(types[position].type)){
-                        imageButton.background = resources.getDrawable(R.drawable.background_select)
-                    }else {
-                        imageButton.background = resources.getDrawable(R.drawable.background_them)
-                    }
+//                    for (i in 0..types.size){
+//                        if (dataStoreProvider.read(TYPE_KEY).equals(types[position].type)){
+//                            imageButton.background = resources.getDrawable(R.drawable.background_select)
+//                        }else {
+//                            imageButton.background = resources.getDrawable(R.drawable.background_them)
+//                        }
+//
+//                    }
+
+//                    if (dataStoreProvider.read(TYPE_KEY).equals(types[position].type)){
+//                        imageButton.background = resources.getDrawable(R.drawable.background_select)
+//                    }else {
+//                        imageButton.background = resources.getDrawable(R.drawable.background_them)
+//                    }
                     val latLng = dataStoreProvider.read(LATLNG_KEY)?:"0.0,0.0"
                            val list = latLng.split(",")
                     Log.i(LATLNG_KEY,latLng)
@@ -313,19 +320,6 @@ class MapFragment : Fragment() {
         } else Math.ceil(resources.displayMetrics.density * value.toDouble()).toInt()
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.businesses_weather_menu,menu)
-
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
-            R.id.will_rain -> {}
-            R.id.will_not_rain ->{}
-        }
-        return super.onOptionsItemSelected(item)
-    }
 
 
     private fun isNetworkAvailable(context: Context): Boolean {

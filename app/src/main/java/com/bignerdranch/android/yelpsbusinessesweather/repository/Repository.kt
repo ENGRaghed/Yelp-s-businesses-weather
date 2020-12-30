@@ -7,6 +7,8 @@ import com.bignerdranch.android.yelpsbusinessesweather.model.YelpRestaurant
 import com.bignerdranch.android.yelpsbusinessesweather.network.WeatherApi
 import com.bignerdranch.android.yelpsbusinessesweather.network.YelpApi
 
+private const val API_KEY = "fIK9HGPtNk-VJEAjIM4YyP0sRdeIpG82w6dnYVw_KsVz5c4RT54du50UT5uDakogcu8ism-9EeiEBc9Ca1014bzMMIejU6neWdmo3Zc6NePREOjcoY2XJ_p8SkTaX3Yx"
+
 class Repository (private val yelpApi: YelpApi, private val weatherApi: WeatherApi, private val businessesDao: Dao) : IRepository {
 
 
@@ -19,26 +21,31 @@ class Repository (private val yelpApi: YelpApi, private val weatherApi: WeatherA
 
         var businesses = yelpApi.searchRestaurants(Autho,lat,lon).businesses
 
+        if (!businesses.isNullOrEmpty()) {
+
+
 //        var businesses = businessesDao.
-        businessesDao.addBusinesses(*businesses.map {
-            YelpRestaurant(
-                it.yelpId,
-                it.name,
-                it.rating,
-                it.price,
-                it.numReviews,
-                it.distanceInMeters,
-                it.imageUrl,
-                it.categories,
-                it.location,
-                it.coordinates,
-                    it.phone
+
+            businessesDao.addBusinesses(*businesses.map {
+                YelpRestaurant(
+                        it.yelpId,
+                        it.id,
+                        it.name,
+                        it.rating,
+                        it.price,
+                        it.numReviews,
+                        it.distanceInMeters,
+                        it.imageUrl,
+                        it.categories,
+                        it.location,
+                        it.coordinates,
+                        it.phone
+                )
+
+            }.toTypedArray()
             )
 
-        }.toTypedArray()
-        )
-
-
+        }
 
         return businesses
     }
@@ -50,26 +57,30 @@ class Repository (private val yelpApi: YelpApi, private val weatherApi: WeatherA
 
         var businesses = yelpApi.searchBusinessesByCategory(Autho,term,lat,lon).businesses
 
+        if (!businesses.isNullOrEmpty()) {
+
+
 //        var businesses = businessesDao.
-        businessesDao.addBusinesses(*businesses.map {
-            YelpRestaurant(
-                it.yelpId,
-                it.name,
-                it.rating,
-                it.price,
-                it.numReviews,
-                it.distanceInMeters,
-                it.imageUrl,
-                it.categories,
-                it.location,
-                it.coordinates,
-                    it.phone
+            businessesDao.addBusinesses(*businesses.map {
+                YelpRestaurant(
+                        it.yelpId,
+                        it.id,
+                        it.name,
+                        it.rating,
+                        it.price,
+                        it.numReviews,
+                        it.distanceInMeters,
+                        it.imageUrl,
+                        it.categories,
+                        it.location,
+                        it.coordinates,
+                        it.phone
+                )
+
+            }.toTypedArray()
             )
 
-        }.toTypedArray()
-        )
-
-
+        }
 
         return businesses
     }
@@ -83,6 +94,9 @@ class Repository (private val yelpApi: YelpApi, private val weatherApi: WeatherA
         return businessesDao.readBusinesse(id)
     }
 
+    override suspend fun fetchPhotos(id: String,Autho: String) : List<String>{
+        return yelpApi.BusinessesDetails(id,Autho).photos
+    }
 //    suspend fun addDayPlan(dayPlan: DayPlan){
 //        businessesDao.addDayPlan(dayPlan)
 //    }

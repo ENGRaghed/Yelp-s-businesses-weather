@@ -13,4 +13,5 @@ interface IRepository {
 
     suspend fun getWeather(key: String, latlon : String, days : String): Weather
     fun readBusinesse(id : String) : LiveData<YelpRestaurant>
+    suspend fun fetchPhotos(id: String,Autho: String) : List<String>
 }

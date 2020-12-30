@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/mapFragment"
         android:name="com.bignerdranch.android.yelpsbusinessesweather.MapFragment"
-        android:label="fragment_map"
+        android:label="Businesses Map"
         tools:layout="@layout/fragment_map" >
         <action
             android:id="@+id/action_mapFragment_to_detailsFragment"
@@ -31,11 +31,14 @@
         <action
             android:id="@+id/action_detailsFragment_to_addDayPlanFragment"
             app:destination="@id/addDayPlanFragment" />
+        <action
+            android:id="@+id/action_detailsFragment_to_businessesListFragment"
+            app:destination="@id/businessesListFragment" />
     </dialog>
     <fragment
         android:id="@+id/dayPlansListFragment"
         android:name="com.bignerdranch.android.yelpsbusinessesweather.DayPlansListFragment"
-        android:label="fragment_day_plans_list"
+        android:label="Day Plans"
         tools:layout="@layout/fragment_day_plans_list" >
         <action
             android:id="@+id/action_dayPlansListFragment_to_mapFragment"
@@ -50,7 +53,7 @@
     <fragment
         android:id="@+id/addDayPlanFragment"
         android:name="com.bignerdranch.android.yelpsbusinessesweather.AddDayPlanFragment"
-        android:label="fragment_add_day_plan"
+        android:label="Add Day Plan"
         tools:layout="@layout/fragment_add_day_plan" >
         <argument
             android:name="dayPlanId"
@@ -68,7 +71,7 @@
     <fragment
         android:id="@+id/editDayPlanFragment"
         android:name="com.bignerdranch.android.yelpsbusinessesweather.EditDayPlanFragment"
-        android:label="fragment_edit_day_plan"
+        android:label="Edit Day Plan"
         tools:layout="@layout/fragment_edit_day_plan" >
         <action
             android:id="@+id/action_editDayPlanFragment_to_dayPlansListFragment"
@@ -76,5 +79,14 @@
         <argument
             android:name="id"
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/businessesListFragment"
+        android:name="com.bignerdranch.android.yelpsbusinessesweather.BusinessesListFragment"
+        android:label="Businesses List"
+        tools:layout="@layout/fragment_businesses_list" >
+        <action
+            android:id="@+id/action_businessesListFragment_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
     </fragment>
 </navigation>

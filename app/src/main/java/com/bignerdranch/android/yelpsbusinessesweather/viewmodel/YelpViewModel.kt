@@ -43,6 +43,14 @@ class YelpViewModel(val repository : IRepository) : ViewModel() {
         return repository.readBusinesse(id)
     }
 
+    fun getPhotos(id : String,auth : String):LiveData<List<String>>{
+        val weather = MutableLiveData<List<String>>()
+        viewModelScope.launch {
+            weather.value = repository.fetchPhotos(id,auth)
+        }
+        return weather
+    }
+
 
 
 

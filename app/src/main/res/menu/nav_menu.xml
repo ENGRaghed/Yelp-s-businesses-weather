@@ -7,5 +7,8 @@
     <item android:id="@+id/mapFragment"
         android:title="Map"
         android:icon="@drawable/ic_my_location_24"/>
+    <item android:id="@+id/businessesListFragment"
+        android:title="List"
+        android:icon="@drawable/ic_baseline_view_list_24"/>
 
 </menu>

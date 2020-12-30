@@ -60,8 +60,11 @@ class AddDayPlanFragment : Fragment(),DatePickerFragment.Callbacks {
         val latLng = LatLng(location[0].toDouble(),location[1].toDouble())
         val boundsBuilder = LatLngBounds.Builder()
         boundsBuilder.include(latLng)
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(),1000,1000,0))
+        googleMap.addMarker(MarkerOptions().position(latLng))
+//        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(),2000,2000,0))
+//        googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(),1000))
+
     }
 
 

@@ -5,31 +5,41 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_margin="2dp"
+    android:layout_margin="5dp"
+    android:padding="10dp"
     android:background="@drawable/background_select">
-
-    <TextView
-        android:id="@+id/time_hour"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="6 pm"
-        android:layout_gravity="center"
-        android:textSize="20sp"/>
+        android:orientation="vertical"
+        android:layout_margin="5dp">
+
+        <TextView
+            android:id="@+id/time_hour"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="6 pm"
+            android:textColor="#000000"
+            android:textSize="16dp" />
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="match_parent"
-        android:layout_height="37dp"
+        android:layout_width="22dp"
+        android:layout_height="29dp"
         android:layout_gravity="center"
         app:srcCompat="@drawable/avatar" />
 
-    <TextView
-        android:id="@+id/temp_c"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="9 ْ"
-        android:layout_gravity="center"
-        android:textSize="20sp"/>
+        <TextView
+            android:id="@+id/temp_c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="9 ْ"
+            android:textColor="#000000"
+            android:textSize="16dp" />
+    </LinearLayout>
+
 
 
 </LinearLayout>

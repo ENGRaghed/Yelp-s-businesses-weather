@@ -23,8 +23,8 @@ interface YelpApi {
         @Query("latitude") lat : String,
         @Query("longitude") lon : String) : YelpResponse
 
-    @GET("businesses/search")
+    @GET("businesses/{id}")
     suspend fun BusinessesDetails(
             @Path("id") id : String,
-            @Header("Authorization") authHeader: String) : YelpRestaurant
+            @Header("Authorization") authHeader: String) : PhotosResponse
 }
