@@ -1,3 +1,23 @@
 <resources>
     <string name="app_name">Yelp\'s Businesses Weather</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search">search</string>
+    <string name="clear_search">clear search</string>
+    <string name="title">title</string>
+    <string name="note">Note</string>
+    <string name="date">date</string>
+    <string name="min">min</string>
+    <string name="max">max</string>
+    <string name="rain">rain</string>
+    <string name="day">day</string>
+    <string name="_7_c">7 °C</string>
+    <string name="_10_c">10 °C</string>
+    <string name="_10">10%</string>
+    <string name="_22_dec">22 dec</string>
+    <string name="_5_c">5 °C</string>
+    <string name="_23_dec">23 Dec</string>
+    <string name="_6_pm">6 pm</string>
+    <string name="_9">9 ْ</string>
+    <string name="dateFormat">yyyy-MM-dd</string>
 </resources>
