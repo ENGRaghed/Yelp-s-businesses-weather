@@ -11,7 +11,6 @@ import com.bignerdranch.android.yelpsbusinessesweather.repository.IDayPlanReposi
 import kotlinx.coroutines.launch
 
 class DayPlanViewModel(private val repository : IDayPlanRepository) : ViewModel(){
-//    val repository = ServiceLocator.dayPlanRepository
 
     fun addDayPlan(dayPlan: DayPlan){
         viewModelScope.launch {

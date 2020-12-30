@@ -1,12 +1,18 @@
 package com.bignerdranch.android.yelpsbusinessesweather
 
 import android.app.AlertDialog
+import android.content.Context
 import android.graphics.Color
+import android.graphics.Paint
+import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -39,7 +45,6 @@ class DayPlansListFragment : Fragment() {
         dayPlanViewModelFactory = DayPlanViewModelFactory(ServiceLocator.dayPlanRepository)
         dayPlanViewModel = ViewModelProvider(this,dayPlanViewModelFactory)
             .get(DayPlanViewModel::class.java)
-//        dayPlanViewModel = ViewModelProvider(this).get(DayPlanViewModel::class.java)
 
 
         dayPlanViewModel.readAllDayPlan.observe(viewLifecycleOwner, Observer {
@@ -63,7 +68,7 @@ class DayPlansListFragment : Fragment() {
                 viewHolder: RecyclerView.ViewHolder,
                 buffer: MutableList<MyButton>
             ) {
-                //add button
+                //delete button
                 buffer.add(
                     MyButton(requireContext(),
                         "delete",
@@ -112,6 +117,46 @@ class DayPlansListFragment : Fragment() {
         var dayPlans = emptyList<DayPlan>()
 
         inner class DayPlanViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+            val tvName= view.findViewById<TextView>(R.id.tvName1)
+            val tvNote= view.findViewById<TextView>(R.id.tvNote)
+            val state_day_plan= view.findViewById<CheckBox>(R.id.state_day_plan)
+            val imageView= view.findViewById<ImageView>(R.id.imageView1)
+
+
+            fun bind(dayPlan : DayPlan){
+
+                tvName.text = dayPlan.name
+                tvNote.text = dayPlan.note
+
+                state_day_plan.isChecked = dayPlan.state
+                if (dayPlan.state){
+                    tvNote.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+                }else{
+                    tvNote.paintFlags = 0
+                }
+
+                state_day_plan.setOnCheckedChangeListener { buttonView, isChecked ->
+
+                    if (isChecked) {
+                        dayPlan.state = true
+                        dayPlanViewModel.updateDayPlan(dayPlan)
+                        tvNote.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
+                    }else{
+                        dayPlan.state = false
+                        dayPlanViewModel.updateDayPlan(dayPlan)
+                        tvNote.paintFlags = 0
+                    }
+
+                }
+                val connectivityManager = context?.
+                getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val activeNetworkInfo = connectivityManager.activeNetworkInfo
+                if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
+                    if (dayPlan.imageUrl.isNotEmpty()) {
+                        Picasso.get().load(dayPlan.imageUrl).into(imageView)
+                    }
+                }
+            }
 
         }
 
@@ -126,9 +171,8 @@ class DayPlansListFragment : Fragment() {
 
         override fun onBindViewHolder(holder: DayPlanViewHolder, position: Int) {
             currentDayPlan = dayPlans[position]
-            holder.itemView.tvName1.text = currentDayPlan.name
-            holder.itemView.tvAddress1.text = currentDayPlan.location.address
-            Picasso.get().load(currentDayPlan.imageUrl).into(holder.itemView.imageView1)
+            holder.bind(currentDayPlan)
+
         }
 
         fun setDayPlanList(dayPlans : List<DayPlan>){
@@ -153,10 +197,4 @@ class DayPlansListFragment : Fragment() {
     }
 
 
-
-
-
-
-
-
-    }
+}

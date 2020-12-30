@@ -1,4 +1,4 @@
-package com.bignerdranch.android.yelpsbusinessesweather
+package com.bignerdranch.android.yelpsbusinessesweather.database
 
 import androidx.room.TypeConverter
 import com.bignerdranch.android.yelpsbusinessesweather.model.Coordinates

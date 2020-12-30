@@ -39,7 +39,6 @@ import java.net.URL
 private const val API_KEY = "fIK9HGPtNk-VJEAjIM4YyP0sRdeIpG82w6dnYVw_KsVz5c4RT54du50UT5uDakogcu8ism-9EeiEBc9Ca1014bzMMIejU6neWdmo3Zc6NePREOjcoY2XJ_p8SkTaX3Yx"
 private const val LATLNG_KEY = "LatLng"
 private const val TYPE_KEY = "Type"
-private const val LOG_TAG = "LOG_TAG"
 
 
 class MapFragment : Fragment() {
@@ -49,7 +48,6 @@ class MapFragment : Fragment() {
     private lateinit var latLng: LatLng
     private lateinit var adapter: TypeAdapter
     private lateinit var dataStoreProvider: DataStoreProvider
-    private var yelpBusinessesList = emptyList<YelpRestaurant>()
 
     private val callback = OnMapReadyCallback { googleMap ->
         /**
@@ -81,7 +79,6 @@ class MapFragment : Fragment() {
             val boundsBuilder = LatLngBounds.Builder()
 
             it.forEach {yelp->
-                val bm: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.avatar)
 
                 val latLng = LatLng(yelp.coordinates.latitude,yelp.coordinates.longitude)
                 boundsBuilder.include(latLng)
@@ -89,8 +86,6 @@ class MapFragment : Fragment() {
                         .position(latLng)
                         .title(yelp.name)
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
-//                        .snippet("Population: 4,137,400")
-//                        .icon(BitmapDescriptorFactory.fromBitmap(customMarker(bm)))
                 ).tag = yelp
 
                 googleMap.moveCamera(CameraUpdateFactory
@@ -155,12 +150,6 @@ class MapFragment : Fragment() {
         TypesList.add(Type("Museums",R.drawable.ic_museum))
         TypesList.add(Type("gym",R.drawable.ic_sports))
 
-//        val dayPlansButton = view.findViewById<Button>(R.id.plan_button)
-//        dayPlansButton.setOnClickListener {
-//            val action = MapFragmentDirections.actionMapFragmentToDayPlansListFragment()
-//            findNavController().navigate(action)
-//        }
-
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerView)
         adapter = TypeAdapter(TypesList)
@@ -190,6 +179,36 @@ class MapFragment : Fragment() {
             RecyclerView.Adapter<TypeAdapter.TypeViewHolder>(){
 
         inner class TypeViewHolder (view : View) : RecyclerView.ViewHolder(view){
+            val connectivityManager = context?.
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val imageButton = view.findViewById<ImageButton>(R.id.image_type)
+
+            fun bind(currentType: Type){
+                imageButton.setImageResource(types[position].imageResourceId)
+
+                imageButton.setOnClickListener {
+                    val activeNetworkInfo = connectivityManager.activeNetworkInfo
+                    if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
+
+                    lifecycleScope.launch {
+
+                        dataStoreProvider.save(TYPE_KEY, currentType.type)
+
+
+                        val latLng = dataStoreProvider.read(LATLNG_KEY) ?: "0.0,0.0"
+                        val list = latLng.split(",")
+                        Log.i(LATLNG_KEY, latLng)
+                        viewModel.getYelpBusinessesByCategory("Bearer $API_KEY", currentType.type, list[0], list[1]).observe(viewLifecycleOwner,
+                                Observer {
+                                    Log.i("MainActivity", "$it")
+                                })
+                    }
+                    }else{
+                        Toast.makeText(requireContext(),"there is no internet connection",Toast.LENGTH_SHORT).show()
+                    }
+
+                }
+            }
 
         }
 
@@ -203,149 +222,18 @@ class MapFragment : Fragment() {
         }
 
         override fun onBindViewHolder(holder: TypeViewHolder, position: Int) {
-            val imageButton = holder.itemView.findViewById<ImageButton>(R.id.image_type)
-            imageButton.setImageResource(types[position].imageResourceId)
+            holder.bind(types[position])
 
-            imageButton.setOnClickListener {
-
-
-//                imageButton.setBackgroundColor(Color.parseColor("#4CB8FB"))
-//                imageButton.background = resources.getDrawable(R.drawable.background_select)
-//                imageButton.background = resources.getDrawable(R.drawable.background_them)
-
-                lifecycleScope.launch {
-//                    if (dataStoreProvider.read(TYPE_KEY).equals(types[position].type)){
-//                       imageButton.setBackgroundColor(Color.parseColor("#4CB8FB"))
-//                    }
-                    dataStoreProvider.save(TYPE_KEY,types[position].type)
-
-//                    for (i in 0..types.size){
-//                        if (dataStoreProvider.read(TYPE_KEY).equals(types[position].type)){
-//                            imageButton.background = resources.getDrawable(R.drawable.background_select)
-//                        }else {
-//                            imageButton.background = resources.getDrawable(R.drawable.background_them)
-//                        }
-//
-//                    }
-
-//                    if (dataStoreProvider.read(TYPE_KEY).equals(types[position].type)){
-//                        imageButton.background = resources.getDrawable(R.drawable.background_select)
-//                    }else {
-//                        imageButton.background = resources.getDrawable(R.drawable.background_them)
-//                    }
-                    val latLng = dataStoreProvider.read(LATLNG_KEY)?:"0.0,0.0"
-                           val list = latLng.split(",")
-                    Log.i(LATLNG_KEY,latLng)
-                    viewModel.getYelpBusinessesByCategory("Bearer $API_KEY", types[position].type,list[0],list[1]).observe(viewLifecycleOwner,
-                            Observer {
-                                Log.i("MainActivity","$it")
-                            })
-                }
-//
-//                lifecycleScope.launch {
-//                    if (dataStoreProvider.read(TYPE_KEY).equals(types[position].type)){
-//                        imageButton.background = resources.getDrawable(R.drawable.background_select)
-//                    }else {
-//                        imageButton.background = resources.getDrawable(R.drawable.background_them)
-//                    }
-//                }
-
-
-
-
-
-            }
         }
 
 
     }
 
-    private fun bitmapDescriptorFromVector(context: Context, @DrawableRes vectorDrawableResourceId: Int): BitmapDescriptor? {
-        val background: Drawable = ContextCompat.getDrawable(context, R.drawable.background_select)!!
-        background.setBounds(0, 0, background.getIntrinsicWidth(), background.getIntrinsicHeight())
-        val vectorDrawable: Drawable = ContextCompat.getDrawable(context, vectorDrawableResourceId)!!
-        vectorDrawable.setBounds(40, 20, vectorDrawable.getIntrinsicWidth() + 40, vectorDrawable.getIntrinsicHeight() + 20)
-        val bitmap: Bitmap = Bitmap.createBitmap(background.getIntrinsicWidth(), background.getIntrinsicHeight(), Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        background.draw(canvas)
-        vectorDrawable.draw(canvas)
-        return BitmapDescriptorFactory.fromBitmap(bitmap)
-    }
-
-    private fun customMarker(bitmap: Bitmap,text:String="0"):Bitmap {
-        /*
-
-         */
-        var result: Bitmap? = null
-        try {
-            result = Bitmap.createBitmap(dp(62F), dp(76F), Bitmap.Config.ARGB_8888)
-            result.eraseColor(Color.TRANSPARENT)
-            val canvas = Canvas(result)
-            val drawable = resources.getDrawable(R.drawable.ic_matker)
-            drawable.setBounds(0, 0, dp(50F), dp(50F))
-            drawable.draw(canvas)
-            val roundPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-            val bitmapRect = RectF()
-            canvas.save()
-            val shader = BitmapShader(bitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
-            val matrix = Matrix()
-            val scale = dp(40F) / bitmap.width.toFloat()
-            matrix.postTranslate(dp(5F).toFloat(), dp(5F).toFloat())
-            matrix.postScale(scale, scale)
-            roundPaint.shader = shader
-            shader.setLocalMatrix(matrix)
-            bitmapRect[dp(5F).toFloat(), dp(5F).toFloat(), dp((52 + 5).toFloat()).toFloat()] =
-                    dp((52 + 5).toFloat()).toFloat()
-            canvas.drawRoundRect(bitmapRect, dp(26F).toFloat(), dp(26F).toFloat(), roundPaint)
-            val paint = Paint()
-            paint.color = Color.WHITE
-            paint.textSize = dp(30F).toFloat()
-            paint.setShadowLayer(1f, 0f, 1f, Color.BLACK)
-
-                canvas.drawText("", dp(32F/2).toFloat(), dp(76F/2).toFloat(), paint)
-            canvas.restore()
-            try {
-                canvas.setBitmap(null)
-            } catch (e: java.lang.Exception) {
-            }
-        } catch (t: Throwable) {
-            t.printStackTrace()
-        }
-        return result!!
-    }
-
-    fun dp(value: Float): Int {
-        return if (value == 0f) {
-            0
-        } else Math.ceil(resources.displayMetrics.density * value.toDouble()).toInt()
-    }
 
 
 
-    private fun isNetworkAvailable(context: Context): Boolean {
-//        val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val connectivityManager = context?.
-        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNetworkInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
-        return activeNetworkInfo != null
-    }
 
-    fun hasActiveInternetConnection(context: Context): Boolean {
-        if (isNetworkAvailable(context)) {
-            try {
-                val urlc: HttpURLConnection = URL("http://www.google.com").openConnection() as HttpURLConnection
-                urlc.setRequestProperty("User-Agent", "Test")
-                urlc.setRequestProperty("Connection", "close")
-                urlc.setConnectTimeout(1500)
-                urlc.connect()
-                return urlc.getResponseCode() === 200
-            } catch (e: IOException) {
-                Log.e(LOG_TAG, "Error checking internet connection", e)
-            }
-        } else {
-            Log.d(LOG_TAG, "No network available!")
-        }
-        return false
-    }
+
+
 
 }

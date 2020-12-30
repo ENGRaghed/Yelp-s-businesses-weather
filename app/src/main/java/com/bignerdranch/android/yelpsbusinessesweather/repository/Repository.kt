@@ -7,7 +7,6 @@ import com.bignerdranch.android.yelpsbusinessesweather.model.YelpRestaurant
 import com.bignerdranch.android.yelpsbusinessesweather.network.WeatherApi
 import com.bignerdranch.android.yelpsbusinessesweather.network.YelpApi
 
-private const val API_KEY = "fIK9HGPtNk-VJEAjIM4YyP0sRdeIpG82w6dnYVw_KsVz5c4RT54du50UT5uDakogcu8ism-9EeiEBc9Ca1014bzMMIejU6neWdmo3Zc6NePREOjcoY2XJ_p8SkTaX3Yx"
 
 class Repository (private val yelpApi: YelpApi, private val weatherApi: WeatherApi, private val businessesDao: Dao) : IRepository {
 
@@ -97,22 +96,5 @@ class Repository (private val yelpApi: YelpApi, private val weatherApi: WeatherA
     override suspend fun fetchPhotos(id: String,Autho: String) : List<String>{
         return yelpApi.BusinessesDetails(id,Autho).photos
     }
-//    suspend fun addDayPlan(dayPlan: DayPlan){
-//        businessesDao.addDayPlan(dayPlan)
-//    }
-//
-//    suspend fun deleteDayPlan(dayPlan: DayPlan){
-//        businessesDao.deleteDayPlan(dayPlan)
-//    }
-//    suspend fun updateDayPlan(dayPlan: DayPlan){
-//        businessesDao.updateDayPlan(dayPlan)
-//    }
-//
-//    fun readAllDayPlan() : LiveData<List<DayPlan>> {
-//        return businessesDao.readAllDayPlans()
-//    }
-//    suspend fun readDayPlan(id : Int) : LiveData<DayPlan> {
-//       return businessesDao.readDayPlan(id)
-//    }
 
 }

@@ -1,5 +1,7 @@
 package com.bignerdranch.android.yelpsbusinessesweather
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -22,6 +24,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.MarkerOptions
@@ -60,10 +63,9 @@ class AddDayPlanFragment : Fragment(),DatePickerFragment.Callbacks {
         val latLng = LatLng(location[0].toDouble(),location[1].toDouble())
         val boundsBuilder = LatLngBounds.Builder()
         boundsBuilder.include(latLng)
-        googleMap.addMarker(MarkerOptions().position(latLng))
-//        googleMap.moveCamera(CameraUpdateFactory.newLatLng(latLng))
+        googleMap.addMarker(MarkerOptions().position(latLng)
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)))
         googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(),2000,2000,0))
-//        googleMap.animateCamera(CameraUpdateFactory.newLatLngBounds(boundsBuilder.build(),1000))
 
     }
 
@@ -83,22 +85,30 @@ class AddDayPlanFragment : Fragment(),DatePickerFragment.Callbacks {
                 .get(DayPlanViewModel::class.java)
 
             val image = view.findViewById<ImageView>(R.id.businesse_image)
-            val datePicker = view.findViewById<Button>(R.id.date_picker)
+            val datePicker = view.findViewById<FloatingActionButton>(R.id.date_picker)
             val name = view.findViewById<TextView>(R.id.businesse_name)
             val addButton = view.findViewById<FloatingActionButton>(R.id.add_day_plan_button)
             val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar2)
             val descriptionTv = view.findViewById<EditText>(R.id.description)
 
 
+            val connectivityManager = context?.
+            getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val activeNetworkInfo = connectivityManager.activeNetworkInfo
 
             yelpViewModel.readBusinesse(args.dayPlanId).observe(viewLifecycleOwner, Observer {
             businesse = it
 
-            Picasso.get().load(it.imageUrl).fit().centerCrop().into(image)
+                if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
 
-            name.text= it.name
-            addButton.visibility = View.VISIBLE
-            ratingBar.rating = it.rating.toFloat()
+                    if (it.imageUrl.isNotEmpty()) {
+                        Picasso.get().load(it.imageUrl).fit().centerCrop().into(image)
+                    }
+                }
+
+                name.text= it.name
+                addButton.visibility = View.VISIBLE
+                ratingBar.rating = it.rating.toFloat()
 
 
 

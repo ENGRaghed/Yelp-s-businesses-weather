@@ -1,16 +1,16 @@
 package com.bignerdranch.android.yelpsbusinessesweather
 
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.RatingBar
-import android.widget.TextView
+import android.widget.*
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -41,12 +41,12 @@ class DetailsFragment : BottomSheetDialogFragment() {
 
     private lateinit var  viewModelFactory : YelpViewModelFactory
     private lateinit var  viewModel : YelpViewModel
-//    private lateinit var  dayPlanViewModel : DayPlanViewModel
     private lateinit var adapter: ForecastHourAdapter
     private lateinit var imageAdapter: ImageAdapter
 
 
     private val args by navArgs<DetailsFragmentArgs>()
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -66,32 +66,28 @@ class DetailsFragment : BottomSheetDialogFragment() {
         recyclerView.itemAnimator = DefaultItemAnimator()
         recyclerView.adapter = adapter
 
+
         val recyclerViewPager2 = view.findViewById<ViewPager2>(R.id.imageView)
         imageAdapter = ImageAdapter()
-//        adapter = ForecastHourAdapter()
-//        val myLayoutManager = LinearLayoutManager(context)
-//        myLayoutManager.orientation = LinearLayoutManager.HORIZONTAL
-//        view.imageView.layoutManager = myLayoutManager
-//        recyclerViewPager2.itemAnimator = DefaultItemAnimator()
         recyclerViewPager2.adapter = imageAdapter
-//        imageAdapter.setData(args.yelp.photos)
-        var list = mutableListOf<String>()
+        val list = mutableListOf<String>()
         list.add(args.yelp.imageUrl)
-//        list.add("https://s3-media2.fl.yelpcdn.com/bphoto/HW3Yn47ELXkFc6ZEkc3WIg/o.jpg")
 
         imageAdapter.setData(list)
-        viewModel.getPhotos(args.yelp.id, "Bearer $API_KEY_YELP").observe(viewLifecycleOwner, Observer {
-            Log.i("image_url","$it")
-            imageAdapter.setData(it)
-        })
+
+        val connectivityManager = context?.
+        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+        if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
+            viewModel.getPhotos(args.yelp.id, "Bearer $API_KEY_YELP").observe(viewLifecycleOwner, Observer {
+                Log.i("image_url", "$it")
+                imageAdapter.setData(it)
+            })
+        }
 
         val name= view.findViewById<TextView>(R.id.tvName)
-//        val image = view.findViewById<ViewPager2>(R.id.imageView)
         val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar)
         val tvNumReviews = view.findViewById<TextView>(R.id.tvNumReviews)
-//        val address = view.findViewById<TextView>(R.id.tvAddress)
-//        val Category = view.findViewById<TextView>(R.id.tvCategory)
-//        val tvPrice = view.findViewById<TextView>(R.id.tvPrice)
         val rain1 = view.findViewById<TextView>(R.id.rain1)
         val rain2 = view.findViewById<TextView>(R.id.rain2)
         val rain3 = view.findViewById<TextView>(R.id.rain3)
@@ -125,57 +121,50 @@ class DetailsFragment : BottomSheetDialogFragment() {
         }
 
 
+        val linearLayout = view.findViewById<LinearLayout>(R.id.linearLayout)
+        if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
 
-        viewModel.getCurrentWeather(API_KEY,
-            "${args.yelp.coordinates.latitude},${args.yelp.coordinates.longitude}",
-            "5").observe(viewLifecycleOwner, Observer {
-
-
-            adapter.setData(it.forecast.forecastday[0].hour)
-            rain1.text = "${it.forecast.forecastday[0].day.daily_chance_of_rain}%"
-            rain2.text = "${it.forecast.forecastday[1].day.daily_chance_of_rain}%"
-            rain3.text = "${it.forecast.forecastday[2].day.daily_chance_of_rain}%"
-            date1.text = it.forecast.forecastday[0].date
-            date2.text = it.forecast.forecastday[1].date
-            date3.text = it.forecast.forecastday[2].date
-            day_1_temp.text = "${it.forecast.forecastday[0].day.avgtemp_c}°C"
-            day_2_temp.text = "${it.forecast.forecastday[1].day.avgtemp_c}°C"
-            day_3_temp.text = "${it.forecast.forecastday[2].day.avgtemp_c}°C"
-            day_1_temp_max.text = "${it.forecast.forecastday[0].day.maxtemp_c}°C"
-            day_2_temp_max.text = "${it.forecast.forecastday[1].day.maxtemp_c}°C"
-            day_3_temp_max.text = "${it.forecast.forecastday[2].day.maxtemp_c}°C"
-            Picasso.get().load("https://${it.forecast.forecastday[0].day.condition.icon}").fit().centerCrop()
-                    .placeholder(R.drawable.wind).error(R.drawable.sunrise).into(imageState1)
-            Log.i("image1","https://${it.forecast.forecastday[0].day.condition.icon}")
-
-            Picasso.get().load("https://${it.forecast.forecastday[1].day.condition.icon}").fit().centerCrop()
-                    .placeholder(R.drawable.wind).error(R.drawable.sunrise).into(imageState2)
-            Log.i("image2","https://${it.forecast.forecastday[1].day.condition.icon}")
-
-            Picasso.get().load("https://${it.forecast.forecastday[2].day.condition.icon}").fit().centerCrop()
-                    .placeholder(R.drawable.wind).error(R.drawable.sunrise).into(imageState3)
-            Log.i("image3","https://${it.forecast.forecastday[2].day.condition.icon}")
+            linearLayout.visibility = View.VISIBLE
+            viewModel.getCurrentWeather(API_KEY,
+                    "${args.yelp.coordinates.latitude},${args.yelp.coordinates.longitude}",
+                    "5").observe(viewLifecycleOwner, Observer {
 
 
+                adapter.setData(it.forecast.forecastday[0].hour)
+                rain1.text = "${it.forecast.forecastday[0].day.daily_chance_of_rain}%"
+                rain2.text = "${it.forecast.forecastday[1].day.daily_chance_of_rain}%"
+                rain3.text = "${it.forecast.forecastday[2].day.daily_chance_of_rain}%"
+                date1.text = it.forecast.forecastday[0].date
+                date2.text = it.forecast.forecastday[1].date
+                date3.text = it.forecast.forecastday[2].date
+                day_1_temp.text = "${it.forecast.forecastday[0].day.avgtemp_c}°C"
+                day_2_temp.text = "${it.forecast.forecastday[1].day.avgtemp_c}°C"
+                day_3_temp.text = "${it.forecast.forecastday[2].day.avgtemp_c}°C"
+                day_1_temp_max.text = "${it.forecast.forecastday[0].day.maxtemp_c}°C"
+                day_2_temp_max.text = "${it.forecast.forecastday[1].day.maxtemp_c}°C"
+                day_3_temp_max.text = "${it.forecast.forecastday[2].day.maxtemp_c}°C"
 
+                if (it.forecast.forecastday[0].day.condition.icon.isNotEmpty()) {
+                    Picasso.get().load("https://${it.forecast.forecastday[0].day.condition.icon}").fit().centerCrop()
+                            .placeholder(R.drawable.wind).error(R.drawable.sunrise).into(imageState1)
+                }
 
+                if (it.forecast.forecastday[1].day.condition.icon.isNotEmpty()) {
+                    Picasso.get().load("https://${it.forecast.forecastday[1].day.condition.icon}").fit().centerCrop()
+                            .placeholder(R.drawable.wind).error(R.drawable.sunrise).into(imageState2)
+                }
 
+                if (it.forecast.forecastday[0].day.condition.icon.isNotEmpty()) {
+                    Picasso.get().load("https://${it.forecast.forecastday[2].day.condition.icon}").fit().centerCrop()
+                            .placeholder(R.drawable.wind).error(R.drawable.sunrise).into(imageState3)
+                }
 
-        })
+            })
+        }
 
         name.text = args.yelp.name?:""
         ratingBar.rating = args.yelp.rating.toFloat()
         tvNumReviews.text = "${args.yelp.numReviews} Reviews"
-
-//        address.text = args.yelp.location.address
-//        Category.text = args.yelp.categories[0].title
-//        tvPrice.text = args.yelp.price
-//        Picasso.get().load(args.yelp.imageUrl).fit().centerCrop().into(image)
-        Log.i("yelp_image",args.yelp.imageUrl)
-
-
-
-
 
         return view
     }
@@ -183,10 +172,35 @@ class DetailsFragment : BottomSheetDialogFragment() {
     inner class ForecastHourAdapter() :
         RecyclerView.Adapter<ForecastHourAdapter.ForecastHourViewHolder>() {
 
-        lateinit var hour: Hour
+        lateinit var currentHour: Hour
         var hours = emptyList<Hour>()
 
         inner class ForecastHourViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+
+            val time_hour = view.findViewById<TextView>(R.id.time_hour)
+            val temp_c = view.findViewById<TextView>(R.id.temp_c)
+            val imageView = view.findViewById<ImageView>(R.id.imageView3)
+
+            fun bind(hour : Hour){
+                if (position < 12){
+                   time_hour.text = "$position am"
+                }else{
+                    time_hour.text = "$position pm"
+
+                }
+                val connectivityManager = context?.
+                getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val activeNetworkInfo = connectivityManager.activeNetworkInfo
+                if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
+                    if (hour.condition.icon.isNotEmpty()){
+                        Picasso.get().load("https://${hour.condition.icon}")
+                                .placeholder(R.drawable.cloud).error(R.drawable.cloud).into(imageView)
+                    }
+                }
+
+                temp_c.text = "${hour.temp_c}°C"
+
+            }
 
         }
 
@@ -200,16 +214,9 @@ class DetailsFragment : BottomSheetDialogFragment() {
         }
 
         override fun onBindViewHolder(holder: ForecastHourViewHolder, position: Int) {
-            hour = hours[position]
-            if (position < 12){
-                holder.itemView.time_hour.text = "$position am"
-            }else{
-                holder.itemView.time_hour.text = "$position pm"
+            currentHour = hours[position]
+            holder.bind(currentHour)
 
-            }
-            Picasso.get().load("https://${hour.condition.icon}")
-                .placeholder(R.drawable.cloud).error(R.drawable.cloud).into(holder.itemView.imageView3)
-            holder.itemView.temp_c.text = "${hour.temp_c}°C"
 
         }
         fun setData(hours: List<Hour>){
@@ -222,7 +229,20 @@ class DetailsFragment : BottomSheetDialogFragment() {
     inner class ImageAdapter():RecyclerView.Adapter<ImageAdapter.ImageViewHolder>(){
         var images = emptyList<String>()
         lateinit var image : String
-        inner class ImageViewHolder(view: View):RecyclerView.ViewHolder(view)
+        inner class ImageViewHolder(view: View):RecyclerView.ViewHolder(view){
+            val imageView = view.findViewById<ImageView>(R.id.image_view_pager2)
+            fun bind(currentImage : String){
+                val connectivityManager = context?.
+                getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val activeNetworkInfo = connectivityManager.activeNetworkInfo
+                if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
+                    if (currentImage.isNotEmpty()) {
+                        Picasso.get().load(image).fit().centerCrop().into(imageView)
+
+                    }
+                }
+            }
+        }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
             val view : View = LayoutInflater.from(parent.context).inflate(R.layout.image_item,parent,false)
@@ -235,7 +255,7 @@ class DetailsFragment : BottomSheetDialogFragment() {
 
         override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
             image = images[position]
-            Picasso.get().load(image).fit().centerCrop().into(holder.itemView.image_view_pager2)
+            holder.bind(image)
         }
         fun setData(images: List<String>){
             this.images = images

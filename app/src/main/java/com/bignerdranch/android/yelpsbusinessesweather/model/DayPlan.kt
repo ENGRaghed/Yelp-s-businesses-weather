@@ -22,5 +22,6 @@ data class DayPlan(
         val location: YelpLocation,
         val coordinates: Coordinates,
         var note : String ="",
-        var date: Date? = null
+        var date: Date? = null,
+        var state : Boolean = false
 ) : Parcelable

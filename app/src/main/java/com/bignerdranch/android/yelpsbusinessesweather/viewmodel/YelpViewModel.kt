@@ -13,7 +13,6 @@ import com.bignerdranch.android.yelpsbusinessesweather.repository.Repository
 import kotlinx.coroutines.launch
 
 class YelpViewModel(val repository : IRepository) : ViewModel() {
-//    val repository = ServiceLocator.repository
 
     val readAllBusinesses : LiveData<List<YelpRestaurant>> = repository.readAllBusinesses
 

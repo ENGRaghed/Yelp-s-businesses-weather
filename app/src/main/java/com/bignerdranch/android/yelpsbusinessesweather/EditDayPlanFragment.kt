@@ -1,5 +1,7 @@
 package com.bignerdranch.android.yelpsbusinessesweather
 
+import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -37,7 +39,7 @@ class EditDayPlanFragment : Fragment(),DatePickerFragment.Callbacks {
         val view = inflater.inflate(R.layout.fragment_edit_day_plan, container, false)
 
         val image = view.findViewById<ImageView>(R.id.businesse_imageEDP)
-        val datePicker = view.findViewById<Button>(R.id.date_pickerEDP)
+        val datePicker = view.findViewById<FloatingActionButton>(R.id.date_pickerEDP)
         val dateTv = view.findViewById<TextView>(R.id.date_TvEDP)
         val name = view.findViewById<TextView>(R.id.businesse_nameEDP)
         val editButton = view.findViewById<FloatingActionButton>(R.id.edit_day_plan_button)
@@ -45,11 +47,21 @@ class EditDayPlanFragment : Fragment(),DatePickerFragment.Callbacks {
         val noteTv = view.findViewById<EditText>(R.id.note)
 
 
+        val connectivityManager = context?.
+        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val activeNetworkInfo = connectivityManager.activeNetworkInfo
+
         dayPlanViewModelFactory = DayPlanViewModelFactory(ServiceLocator.dayPlanRepository)
         dayPlanViewModel = ViewModelProvider(this,dayPlanViewModelFactory).get(DayPlanViewModel::class.java)
         dayPlanViewModel.readDayPlan(args.id).observe(viewLifecycleOwner, Observer {
             setDayPlan(it)
-            Picasso.get().load(it.imageUrl).fit().centerCrop().into(image)
+            if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
+
+                if (it.imageUrl.isNotEmpty()) {
+                    Picasso.get().load(it.imageUrl).fit().centerCrop().into(image)
+
+                }
+            }
             name.text= it.name
             editButton.visibility = View.VISIBLE
             ratingBar.rating = it.rating.toFloat()
