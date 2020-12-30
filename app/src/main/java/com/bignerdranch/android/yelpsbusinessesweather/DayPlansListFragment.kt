@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.net.ConnectivityManager
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +13,7 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -27,7 +27,7 @@ import com.bignerdranch.android.yelpsbusinessesweather.swipe.MySwipeHelper
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.DayPlanViewModel
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.DayPlanViewModelFactory
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.day_plan_item.view.*
+import java.text.SimpleDateFormat
 
 class DayPlansListFragment : Fragment() {
 
@@ -40,10 +40,13 @@ class DayPlansListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_day_plans_list, container, false)
+        val view = inflater.inflate(
+            R.layout.fragment_day_plans_list, container,
+            false
+        )
 
         dayPlanViewModelFactory = DayPlanViewModelFactory(ServiceLocator.dayPlanRepository)
-        dayPlanViewModel = ViewModelProvider(this,dayPlanViewModelFactory)
+        dayPlanViewModel = ViewModelProvider(this, dayPlanViewModelFactory)
             .get(DayPlanViewModel::class.java)
 
 
@@ -63,7 +66,7 @@ class DayPlansListFragment : Fragment() {
 
         //add swipe
 
-        val swipe = object : MySwipeHelper(requireContext(),recyclerView,200) {
+        val swipe = object : MySwipeHelper(requireContext(), recyclerView, 200) {
             override fun instantiateMyButton(
                 viewHolder: RecyclerView.ViewHolder,
                 buffer: MutableList<MyButton>
@@ -96,7 +99,9 @@ class DayPlansListFragment : Fragment() {
 
                                 val action =
                                     DayPlansListFragmentDirections
-                                        .actionDayPlansListFragmentToEditDayPlanFragment(adapter.dayPlans[pos].dayPlanId.toString())
+                                        .actionDayPlansListFragmentToEditDayPlanFragment(
+                                            adapter.dayPlans[pos].dayPlanId.toString()
+                                        )
                                 findNavController().navigate(action)
                             }
                         })
@@ -106,32 +111,38 @@ class DayPlansListFragment : Fragment() {
 
         }
 
-                return view
+        return view
     }
 
 
-    inner class DayPlanAdapter() :
+    inner class DayPlanAdapter :
         RecyclerView.Adapter<DayPlanAdapter.DayPlanViewHolder>() {
 
         lateinit var currentDayPlan: DayPlan
         var dayPlans = emptyList<DayPlan>()
 
         inner class DayPlanViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-            val tvName= view.findViewById<TextView>(R.id.tvName1)
-            val tvNote= view.findViewById<TextView>(R.id.tvNote)
-            val state_day_plan= view.findViewById<CheckBox>(R.id.state_day_plan)
-            val imageView= view.findViewById<ImageView>(R.id.imageView1)
+            val tvName = view.findViewById<TextView>(R.id.tvName1)
+            val tvDate = view.findViewById<TextView>(R.id.tvDate)
+            val tvNote = view.findViewById<TextView>(R.id.tvNote)
+            val state_day_plan = view.findViewById<CheckBox>(R.id.state_day_plan)
+            val imageView = view.findViewById<ImageView>(R.id.imageView1)
 
 
-            fun bind(dayPlan : DayPlan){
+            fun bind(dayPlan: DayPlan) {
 
                 tvName.text = dayPlan.name
                 tvNote.text = dayPlan.note
+                if (dayPlan.date != null) {
+                    val simpleDateFormat = SimpleDateFormat("MMM dd")
+                    val dateFormat = simpleDateFormat.format(dayPlan.date)
+                    tvDate.text = dateFormat
+                }
 
                 state_day_plan.isChecked = dayPlan.state
-                if (dayPlan.state){
+                if (dayPlan.state) {
                     tvNote.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-                }else{
+                } else {
                     tvNote.paintFlags = 0
                 }
 
@@ -141,15 +152,15 @@ class DayPlansListFragment : Fragment() {
                         dayPlan.state = true
                         dayPlanViewModel.updateDayPlan(dayPlan)
                         tvNote.paintFlags = Paint.STRIKE_THRU_TEXT_FLAG
-                    }else{
+                    } else {
                         dayPlan.state = false
                         dayPlanViewModel.updateDayPlan(dayPlan)
                         tvNote.paintFlags = 0
                     }
 
                 }
-                val connectivityManager = context?.
-                getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val connectivityManager =
+                    context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
                 val activeNetworkInfo = connectivityManager.activeNetworkInfo
                 if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
                     if (dayPlan.imageUrl.isNotEmpty()) {
@@ -161,7 +172,8 @@ class DayPlansListFragment : Fragment() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DayPlanViewHolder {
-            val view : View = LayoutInflater.from(parent.context).inflate(R.layout.day_plan_item,parent,false)
+            val view: View =
+                LayoutInflater.from(parent.context).inflate(R.layout.day_plan_item, parent, false)
             return DayPlanViewHolder(view)
         }
 
@@ -175,20 +187,21 @@ class DayPlansListFragment : Fragment() {
 
         }
 
-        fun setDayPlanList(dayPlans : List<DayPlan>){
+        fun setDayPlanList(dayPlans: List<DayPlan>) {
             this.dayPlans = dayPlans
             notifyDataSetChanged()
         }
 
     }
 
-    private fun deleteDayPlan(dayPlan: DayPlan){
+    private fun deleteDayPlan(dayPlan: DayPlan) {
         val builder = AlertDialog.Builder(requireContext())
-        builder.setPositiveButton("yes"){_, _ ->
+        builder.setPositiveButton("yes") { _, _ ->
             dayPlanViewModel.deleteDayPlan(dayPlan)
-            Toast.makeText(requireContext(),"deleted ${dayPlan.name}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), "deleted ${dayPlan.name}",
+                Toast.LENGTH_SHORT).show()
         }
-        builder.setNegativeButton("no"){_, _ ->
+        builder.setNegativeButton("no") { _, _ ->
 
         }
         builder.setTitle("delete ${dayPlan.name}")

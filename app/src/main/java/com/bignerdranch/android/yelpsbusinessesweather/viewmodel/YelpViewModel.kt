@@ -23,7 +23,8 @@ class YelpViewModel(val repository : IRepository) : ViewModel() {
         }
         return yelp
     }
-    fun getYelpBusinessesByCategory(Autho : String, term : String ,lat:String,lon:String):LiveData<List<YelpRestaurant>>{
+    fun getYelpBusinessesByCategory(Autho : String, term : String ,lat:String,lon:String)
+            : LiveData<List<YelpRestaurant>>{
         val yelp = MutableLiveData<List<YelpRestaurant>>()
         viewModelScope.launch {
             yelp.value = repository.getYelpBusinessesByCategory(Autho,term,lat,lon)

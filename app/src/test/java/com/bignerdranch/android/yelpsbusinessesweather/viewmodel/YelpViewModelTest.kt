@@ -76,5 +76,13 @@ class YelpViewModelTest {
         }
     }
 
+    @Test
+    fun `read all photos for specific yelp business when inter id of that business`(){
+        mainCoroutineRule.dispatcher.runBlockingTest {
+            val photos = viewModel.getPhotos("ghhjkkubgvg", API_KEY).getOrAwaitValue()
+            assert(photos.isNotEmpty())
+        }
+    }
+
 
 }

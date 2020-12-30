@@ -67,7 +67,7 @@
         tools:text="41 Kenmare St" />
 
     <TextView
-        android:id="@+id/tvCategory1"
+        android:id="@+id/tvDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"

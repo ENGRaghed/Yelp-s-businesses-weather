@@ -36,7 +36,8 @@ class EditDayPlanFragment : Fragment(),DatePickerFragment.Callbacks {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_edit_day_plan, container, false)
+        val view = inflater.inflate(R.layout.fragment_edit_day_plan, container,
+            false)
 
         val image = view.findViewById<ImageView>(R.id.businesse_imageEDP)
         val datePicker = view.findViewById<FloatingActionButton>(R.id.date_pickerEDP)
@@ -52,7 +53,8 @@ class EditDayPlanFragment : Fragment(),DatePickerFragment.Callbacks {
         val activeNetworkInfo = connectivityManager.activeNetworkInfo
 
         dayPlanViewModelFactory = DayPlanViewModelFactory(ServiceLocator.dayPlanRepository)
-        dayPlanViewModel = ViewModelProvider(this,dayPlanViewModelFactory).get(DayPlanViewModel::class.java)
+        dayPlanViewModel = ViewModelProvider(this,dayPlanViewModelFactory)
+            .get(DayPlanViewModel::class.java)
         dayPlanViewModel.readDayPlan(args.id).observe(viewLifecycleOwner, Observer {
             setDayPlan(it)
             if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
@@ -85,9 +87,11 @@ class EditDayPlanFragment : Fragment(),DatePickerFragment.Callbacks {
             dayPlan.note = noteTv.text.toString()
             dayPlanViewModel.updateDayPlan(dayPlan)
 
-            Toast.makeText(requireContext(),"edit ${dayPlan.name} successful",Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(),"edit ${dayPlan.name} successful",
+                Toast.LENGTH_SHORT).show()
 
-            val action = EditDayPlanFragmentDirections.actionEditDayPlanFragmentToDayPlansListFragment()
+            val action = EditDayPlanFragmentDirections
+                .actionEditDayPlanFragmentToDayPlansListFragment()
             findNavController().navigate(action)
         }
 

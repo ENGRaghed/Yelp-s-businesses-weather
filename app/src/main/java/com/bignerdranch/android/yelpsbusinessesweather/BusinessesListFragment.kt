@@ -47,7 +47,8 @@ class BusinessesListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val view =inflater.inflate(R.layout.fragment_businesses_list, container, false)
+        val view =inflater.inflate(R.layout.fragment_businesses_list, container,
+            false)
 
         viewModelFactory = YelpViewModelFactory(ServiceLocator.repository)
         viewModel= ViewModelProvider(this,viewModelFactory).get(YelpViewModel::class.java)
@@ -154,13 +155,15 @@ class BusinessesListFragment : Fragment() {
                         getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
                         val activeNetworkInfo = connectivityManager.activeNetworkInfo
                         if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
-                            viewModel.getYelpBusinessesByCategory("Bearer $API_KEY", query
+                            viewModel.getYelpBusinessesByCategory("Bearer $API_KEY",
+                                query
                                     ?: "", list[0], list[1]).observe(viewLifecycleOwner,
                                     Observer {
                                         Log.i("MainActivity", "$it")
                                     })
                         }else{
-                            Toast.makeText(requireContext(),"there is no internet connection",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(),"there is no internet connection"
+                                , Toast.LENGTH_SHORT).show()
                         }
                     }
 

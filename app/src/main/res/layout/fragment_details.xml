@@ -111,7 +111,7 @@
             android:id="@+id/min_tmp_title"
             android:layout_width="76dp"
             android:layout_height="wrap_content"
-            android:text="min"
+            android:text="@string/min"
             android:textColor="#000000"
             android:textSize="20dp" />
 
@@ -119,7 +119,7 @@
             android:id="@+id/max_tmp_title"
             android:layout_width="76dp"
             android:layout_height="wrap_content"
-            android:text="max"
+            android:text="@string/max"
             android:textColor="#000000"
             android:textSize="20dp" />
         <Space
@@ -130,23 +130,18 @@
             android:id="@+id/rain_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="rain"
+            android:text="@string/rain"
             android:textColor="#000000"
             android:textSize="20dp" />
         <Space
             android:layout_width="40dp"
             android:layout_height="wrap_content" />
-<!--        <TextView-->
-<!--            android:id="@+id/state_1_title"-->
-<!--            android:layout_width="76dp"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="condition"/>-->
 
         <TextView
             android:id="@+id/date_title_"
             android:layout_width="76dp"
             android:layout_height="wrap_content"
-            android:text="day"
+            android:text="@string/day"
             android:textColor="#000000"
             android:textSize="20dp" />
 
@@ -169,7 +164,7 @@
                 android:id="@+id/min_tmp"
                 android:layout_width="73dp"
                 android:layout_height="wrap_content"
-                android:text="7 °C"
+                android:text="@string/_7_c"
                 android:textColor="#000000"
                 android:textSize="14dp" />
 
@@ -182,7 +177,7 @@
                 android:layout_width="76dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="10 °C"
+                android:text="@string/_10_c"
                 android:textColor="#000000"
                 android:textSize="14dp" />
 
@@ -195,7 +190,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="10%"
+                android:text="@string/_10"
                 android:textColor="#000000"
                 android:textSize="14dp" />
 
@@ -217,7 +212,7 @@
                 android:id="@+id/date1"
                 android:layout_width="76dp"
                 android:layout_height="wrap_content"
-                android:text="22 dec"
+                android:text="@string/_22_dec"
                 android:textColor="#000000"
                 android:textSize="12dp" />
 
@@ -240,7 +235,7 @@
                 android:id="@+id/min_tmp2"
                 android:layout_width="76dp"
                 android:layout_height="wrap_content"
-                android:text="5 °C"
+                android:text="@string/_5_c"
                 android:textColor="#000000"
                 android:textSize="14dp" />
 
@@ -253,7 +248,7 @@
                 android:id="@+id/max_tmp2"
                 android:layout_width="76dp"
                 android:layout_height="wrap_content"
-                android:text="7 °C"
+                android:text="@string/_7_c"
                 android:textColor="#000000"
                 android:textSize="14dp" />
             <Space
@@ -265,7 +260,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="10%"
+                android:text="@string/_10"
                 android:textColor="#000000"
                 android:textSize="14dp" />
 
@@ -288,7 +283,7 @@
                 android:id="@+id/date2"
                 android:layout_width="76dp"
                 android:layout_height="wrap_content"
-                android:text="23 Dec"
+                android:text="@string/_23_dec"
                 android:textColor="#000000"
                 android:textSize="12dp" />
 
@@ -311,7 +306,7 @@
                 android:id="@+id/min_tmp3"
                 android:layout_width="76dp"
                 android:layout_height="wrap_content"
-                android:text="8 C"
+                android:text="@string/_7_c"
                 android:textColor="#000000"
                 android:textSize="14dp" />
 
@@ -323,7 +318,7 @@
                 android:id="@+id/max_tmp3"
                 android:layout_width="76dp"
                 android:layout_height="wrap_content"
-                android:text="9 C"
+                android:text="@string/_7_c"
                 android:textColor="#000000"
                 android:textSize="14dp" />
 
@@ -336,7 +331,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="10%"
+                android:text="@string/_10"
                 android:textColor="#000000"
                 android:textSize="14dp" />
             <Space
@@ -355,7 +350,7 @@
                 android:id="@+id/date3"
                 android:layout_width="76dp"
                 android:layout_height="wrap_content"
-                android:text="24 Dec"
+                android:text="@string/_23_dec"
                 android:textColor="#000000"
                 android:textSize="12dp" />
 
@@ -384,116 +379,6 @@
         android:src="@android:drawable/stat_sys_phone_call"
         app:layout_constraintEnd_toStartOf="@+id/add_day_plan"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <!--    <LinearLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_weight="1"-->
-    <!--        android:background="@drawable/background_them"-->
-    <!--        android:gravity="center"-->
-    <!--        android:orientation="horizontal"-->
-    <!--        android:padding="8dp"-->
-    <!--        tools:layout_editor_absoluteX="0dp"-->
-    <!--        tools:layout_editor_absoluteY="577dp">-->
-
-    <!--        <ImageView-->
-    <!--            android:id="@+id/state_3"-->
-    <!--            android:layout_width="25dp"-->
-    <!--            android:layout_height="25dp"-->
-    <!--            android:src="@drawable/sunrise"-->
-    <!--            app:tint="#0C0101" />-->
-
-    <!--        <Space-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="5dp" />-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:text="Sunrise"-->
-    <!--            android:textSize="12dp" />-->
-
-    <!--        <TextView-->
-    <!--            android:id="@+id/day_3"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:text="06:40 AM"-->
-    <!--            android:textSize="14dp" />-->
-
-    <!--    </LinearLayout>-->
-
-    <!--    <LinearLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_weight="1"-->
-    <!--        android:background="@drawable/background_them"-->
-    <!--        android:gravity="center"-->
-    <!--        android:orientation="horizontal"-->
-    <!--        android:padding="8dp"-->
-    <!--        tools:layout_editor_absoluteX="0dp"-->
-    <!--        tools:layout_editor_absoluteY="495dp">-->
-
-    <!--        <ImageView-->
-    <!--            android:id="@+id/state_2"-->
-    <!--            android:layout_width="25dp"-->
-    <!--            android:layout_height="25dp"-->
-    <!--            android:src="@drawable/sunset"-->
-    <!--            app:tint="#0C0101" />-->
-
-    <!--        <Space-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="5dp" />-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:text="Sunset"-->
-    <!--            android:textSize="12dp" />-->
-
-    <!--        <TextView-->
-    <!--            android:id="@+id/day_2"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:text="06:40 AM"-->
-    <!--            android:textSize="14dp" />-->
-
-    <!--    </LinearLayout>-->
-
-    <!--    <LinearLayout-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        android:layout_weight="1"-->
-    <!--        android:background="@drawable/background_them"-->
-    <!--        android:gravity="center"-->
-    <!--        android:padding="8dp"-->
-    <!--        android:orientation="horizontal"-->
-    <!--        tools:layout_editor_absoluteX="12dp"-->
-    <!--        tools:layout_editor_absoluteY="413dp">-->
-
-    <!--        <ImageView-->
-    <!--            android:id="@+id/state_1"-->
-    <!--            android:layout_width="25dp"-->
-    <!--            android:layout_height="25dp"-->
-    <!--            android:src="@drawable/wind"-->
-    <!--            app:tint="#0C0101" />-->
-
-    <!--        <Space-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="5dp" />-->
-
-    <!--        <TextView-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:text="Wind"-->
-    <!--            android:textSize="12dp" />-->
-
-    <!--        <TextView-->
-    <!--            android:id="@+id/day_1"-->
-    <!--            android:layout_width="wrap_content"-->
-    <!--            android:layout_height="wrap_content"-->
-    <!--            android:text="06:40 AM"-->
-    <!--            android:textSize="14dp" />-->
-    <!--    </LinearLayout>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

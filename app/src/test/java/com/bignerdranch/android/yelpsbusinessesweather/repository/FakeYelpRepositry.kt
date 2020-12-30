@@ -10,7 +10,7 @@ class FakeYelpRepositry : IRepository{
     val yelpRestaurantLiveData = MutableLiveData<List<YelpRestaurant>>()
     val yelpRestaurantList = ArrayList<YelpRestaurant>()
     val yelpRestaurant = MutableLiveData<YelpRestaurant>()
-
+    val photos = listOf("url1","url2","url3")
 
 
 
@@ -27,22 +27,19 @@ class FakeYelpRepositry : IRepository{
 
     val yelpRestaurant1 =YelpRestaurant( 0,
             "jjjjj","Kim's Sushi",
-            "",
             4.5,
             "$$",
-            false,
             812,
             3.3,
             "https://s3-media4.fl.yelpcdn.com/bphoto/FU1dpikJj_A49HUTg16smA/o.jpg", category
-            , YelpLocation("458 Eagle Rock Ave"), Coordinates(40.8034302, -74.2490792),emptyList<String>())
+            , YelpLocation("458 Eagle Rock Ave"), Coordinates(40.8034302, -74.2490792))
     val yelpRestaurant2 =YelpRestaurant( 1,
-            "jkjjkj","Essex County Turtle Back Zoo", "",4.0,
+            "jkjjkj","Essex County Turtle Back Zoo", 4.0,
             "$$",
-            false,
             331,
             3.3,
             "", category
-            , YelpLocation("458 Eagle Rock Ave"), Coordinates(40.8034302, -74.2490792), emptyList<String>())
+            , YelpLocation("458 Eagle Rock Ave"), Coordinates(40.8034302, -74.2490792))
 
 
     fun add(){
@@ -71,6 +68,10 @@ class FakeYelpRepositry : IRepository{
         val index = yelpRestaurantList.indexOfFirst { it.yelpId == id.toInt() }
         yelpRestaurant.value = yelpRestaurantList[index]
         return yelpRestaurant
+    }
+
+    override suspend fun fetchPhotos(id: String, Autho: String): List<String> {
+        return photos
     }
 
 }

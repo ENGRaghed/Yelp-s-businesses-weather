@@ -122,13 +122,15 @@ class MapFragment : Fragment() {
                     Log.i(LATLNG_KEY,dataStoreProvider.read(LATLNG_KEY)?:"")
                     dataStoreProvider.save(TYPE_KEY,"")
                 }
-                viewModel.getYelpBusinesses("Bearer $API_KEY", it.latitude.toString(),it.longitude.toString()).observe(viewLifecycleOwner,
+                viewModel.getYelpBusinesses("Bearer $API_KEY", it.latitude.toString()
+                    ,it.longitude.toString()).observe(viewLifecycleOwner,
                     Observer {
                         Log.i("MainActivity","$it")
                         googleMap.clear()
                     })
             }else{
-                    Toast.makeText(requireContext(),"there is no internet connection",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),"there is no internet connection",
+                        Toast.LENGTH_SHORT).show()
                 }
         }
 
@@ -198,13 +200,15 @@ class MapFragment : Fragment() {
                         val latLng = dataStoreProvider.read(LATLNG_KEY) ?: "0.0,0.0"
                         val list = latLng.split(",")
                         Log.i(LATLNG_KEY, latLng)
-                        viewModel.getYelpBusinessesByCategory("Bearer $API_KEY", currentType.type, list[0], list[1]).observe(viewLifecycleOwner,
+                        viewModel.getYelpBusinessesByCategory("Bearer $API_KEY",
+                            currentType.type, list[0], list[1]).observe(viewLifecycleOwner,
                                 Observer {
                                     Log.i("MainActivity", "$it")
                                 })
                     }
                     }else{
-                        Toast.makeText(requireContext(),"there is no internet connection",Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(),"there is no internet connection",
+                            Toast.LENGTH_SHORT).show()
                     }
 
                 }
@@ -213,7 +217,8 @@ class MapFragment : Fragment() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TypeViewHolder {
-            val view : View = LayoutInflater.from(parent.context).inflate(R.layout.type_item,parent,false)
+            val view : View = LayoutInflater.from(parent.context).inflate(R.layout.type_item,parent,
+                false)
             return TypeViewHolder(view)
         }
 

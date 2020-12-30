@@ -10,7 +10,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.RatingBar
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -19,44 +22,38 @@ import androidx.recyclerview.widget.DefaultItemAnimator
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
-import com.bignerdranch.android.yelpsbusinessesweather.model.DayPlan
 import com.bignerdranch.android.yelpsbusinessesweather.model.Hour
-import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.DayPlanViewModel
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.YelpViewModel
 import com.bignerdranch.android.yelpsbusinessesweather.viewmodel.YelpViewModelFactory
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.fragment_details.view.*
-import kotlinx.android.synthetic.main.hour_item.view.*
-import kotlinx.android.synthetic.main.image_item.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 private const val API_KEY = "843eaebc6a294b4593b190359201612"
-private const val API_KEY_YELP = "fIK9HGPtNk-VJEAjIM4YyP0sRdeIpG82w6dnYVw_KsVz5c4RT54du50UT5uDakogcu8ism-9EeiEBc9Ca1014bzMMIejU6neWdmo3Zc6NePREOjcoY2XJ_p8SkTaX3Yx"
+private const val API_KEY_YELP =
+    "fIK9HGPtNk-VJEAjIM4YyP0sRdeIpG82w6dnYVw_KsVz5c4RT54du50UT5uDakogcu8ism-9EeiEBc9Ca1014bzMMIejU6neWdmo3Zc6NePREOjcoY2XJ_p8SkTaX3Yx"
 
 
 class DetailsFragment : BottomSheetDialogFragment() {
 
-    private lateinit var  viewModelFactory : YelpViewModelFactory
-    private lateinit var  viewModel : YelpViewModel
+    private lateinit var viewModelFactory: YelpViewModelFactory
+    private lateinit var viewModel: YelpViewModel
     private lateinit var adapter: ForecastHourAdapter
     private lateinit var imageAdapter: ImageAdapter
 
 
     private val args by navArgs<DetailsFragmentArgs>()
+
     @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val view =  inflater.inflate(R.layout.fragment_details, container, false)
+        val view = inflater.inflate(R.layout.fragment_details, container, false)
 
         viewModelFactory = YelpViewModelFactory(ServiceLocator.repository)
-        viewModel= ViewModelProvider(this,viewModelFactory).get(YelpViewModel::class.java)
-//        dayPlanViewModel = ViewModelProvider(this).get(DayPlanViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(YelpViewModel::class.java)
 
         val recyclerView = view.findViewById<RecyclerView>(R.id.rv_hours)
         adapter = ForecastHourAdapter()
@@ -75,17 +72,18 @@ class DetailsFragment : BottomSheetDialogFragment() {
 
         imageAdapter.setData(list)
 
-        val connectivityManager = context?.
-        getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager =
+            context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetworkInfo = connectivityManager.activeNetworkInfo
         if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
-            viewModel.getPhotos(args.yelp.id, "Bearer $API_KEY_YELP").observe(viewLifecycleOwner, Observer {
-                Log.i("image_url", "$it")
-                imageAdapter.setData(it)
-            })
+            viewModel.getPhotos(args.yelp.id, "Bearer $API_KEY_YELP")
+                .observe(viewLifecycleOwner, Observer {
+                    Log.i("image_url", "$it")
+                    imageAdapter.setData(it)
+                })
         }
 
-        val name= view.findViewById<TextView>(R.id.tvName)
+        val name = view.findViewById<TextView>(R.id.tvName)
         val ratingBar = view.findViewById<RatingBar>(R.id.ratingBar)
         val tvNumReviews = view.findViewById<TextView>(R.id.tvNumReviews)
         val rain1 = view.findViewById<TextView>(R.id.rain1)
@@ -110,13 +108,14 @@ class DetailsFragment : BottomSheetDialogFragment() {
             val action = DetailsFragmentDirections
                 .actionDetailsFragmentToAddDayPlanFragment(
                     args.yelp.yelpId.toString(),
-                    "${args.yelp.coordinates.latitude},${args.yelp.coordinates.longitude}")
+                    "${args.yelp.coordinates.latitude},${args.yelp.coordinates.longitude}"
+                )
             findNavController().navigate(action)
         }
 
         phone.setOnClickListener {
             var intent = Intent(Intent.ACTION_DIAL)
-            intent.setData(Uri.parse("tel:"+args.yelp.phone))
+            intent.data = Uri.parse("tel:" + args.yelp.phone)
             startActivity(intent)
         }
 
@@ -125,9 +124,11 @@ class DetailsFragment : BottomSheetDialogFragment() {
         if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
 
             linearLayout.visibility = View.VISIBLE
-            viewModel.getCurrentWeather(API_KEY,
-                    "${args.yelp.coordinates.latitude},${args.yelp.coordinates.longitude}",
-                    "5").observe(viewLifecycleOwner, Observer {
+            viewModel.getCurrentWeather(
+                API_KEY,
+                "${args.yelp.coordinates.latitude},${args.yelp.coordinates.longitude}",
+                "5"
+            ).observe(viewLifecycleOwner, Observer {
 
 
                 adapter.setData(it.forecast.forecastday[0].hour)
@@ -145,31 +146,42 @@ class DetailsFragment : BottomSheetDialogFragment() {
                 day_3_temp_max.text = "${it.forecast.forecastday[2].day.maxtemp_c}°C"
 
                 if (it.forecast.forecastday[0].day.condition.icon.isNotEmpty()) {
-                    Picasso.get().load("https://${it.forecast.forecastday[0].day.condition.icon}").fit().centerCrop()
-                            .placeholder(R.drawable.wind).error(R.drawable.sunrise).into(imageState1)
+                    Picasso.get()
+                        .load("https://${it.forecast.forecastday[0].day.condition.icon}")
+                        .fit()
+                        .centerCrop()
+                        .placeholder(R.drawable.wind).error(R.drawable.sunrise)
+                        .into(imageState1)
                 }
 
                 if (it.forecast.forecastday[1].day.condition.icon.isNotEmpty()) {
-                    Picasso.get().load("https://${it.forecast.forecastday[1].day.condition.icon}").fit().centerCrop()
-                            .placeholder(R.drawable.wind).error(R.drawable.sunrise).into(imageState2)
+                    Picasso.get()
+                        .load("https://${it.forecast.forecastday[1].day.condition.icon}")
+                        .fit().centerCrop()
+                        .placeholder(R.drawable.wind).error(R.drawable.sunrise)
+                        .into(imageState2)
                 }
 
                 if (it.forecast.forecastday[0].day.condition.icon.isNotEmpty()) {
-                    Picasso.get().load("https://${it.forecast.forecastday[2].day.condition.icon}").fit().centerCrop()
-                            .placeholder(R.drawable.wind).error(R.drawable.sunrise).into(imageState3)
+                    Picasso.get().load("https://${it.forecast.forecastday[2]
+                        .day.condition.icon}")
+                        .fit().centerCrop()
+                        .placeholder(R.drawable.wind)
+                        .error(R.drawable.sunrise)
+                        .into(imageState3)
                 }
 
             })
         }
 
-        name.text = args.yelp.name?:""
+        name.text = args.yelp.name
         ratingBar.rating = args.yelp.rating.toFloat()
         tvNumReviews.text = "${args.yelp.numReviews} Reviews"
 
         return view
     }
 
-    inner class ForecastHourAdapter() :
+    inner class ForecastHourAdapter :
         RecyclerView.Adapter<ForecastHourAdapter.ForecastHourViewHolder>() {
 
         lateinit var currentHour: Hour
@@ -181,20 +193,20 @@ class DetailsFragment : BottomSheetDialogFragment() {
             val temp_c = view.findViewById<TextView>(R.id.temp_c)
             val imageView = view.findViewById<ImageView>(R.id.imageView3)
 
-            fun bind(hour : Hour){
-                if (position < 12){
-                   time_hour.text = "$position am"
-                }else{
+            fun bind(hour: Hour, position: Int) {
+                if (position < 12) {
+                    time_hour.text = "$position am"
+                } else {
                     time_hour.text = "$position pm"
 
                 }
-                val connectivityManager = context?.
-                getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+                val connectivityManager =
+                    context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
                 val activeNetworkInfo = connectivityManager.activeNetworkInfo
                 if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
-                    if (hour.condition.icon.isNotEmpty()){
+                    if (hour.condition.icon.isNotEmpty()) {
                         Picasso.get().load("https://${hour.condition.icon}")
-                                .placeholder(R.drawable.cloud).error(R.drawable.cloud).into(imageView)
+                            .placeholder(R.drawable.cloud).error(R.drawable.cloud).into(imageView)
                     }
                 }
 
@@ -205,7 +217,10 @@ class DetailsFragment : BottomSheetDialogFragment() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForecastHourViewHolder {
-            val view : View = LayoutInflater.from(parent.context).inflate(R.layout.hour_item,parent,false)
+            val view: View = LayoutInflater.from(parent.context).inflate(
+                R.layout.hour_item, parent,
+                false
+            )
             return ForecastHourViewHolder(view)
         }
 
@@ -215,25 +230,27 @@ class DetailsFragment : BottomSheetDialogFragment() {
 
         override fun onBindViewHolder(holder: ForecastHourViewHolder, position: Int) {
             currentHour = hours[position]
-            holder.bind(currentHour)
+            holder.bind(currentHour, position)
 
 
         }
-        fun setData(hours: List<Hour>){
+
+        fun setData(hours: List<Hour>) {
             this.hours = hours
             notifyDataSetChanged()
         }
 
     }
 
-    inner class ImageAdapter():RecyclerView.Adapter<ImageAdapter.ImageViewHolder>(){
+    inner class ImageAdapter : RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
         var images = emptyList<String>()
-        lateinit var image : String
-        inner class ImageViewHolder(view: View):RecyclerView.ViewHolder(view){
+        lateinit var image: String
+
+        inner class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val imageView = view.findViewById<ImageView>(R.id.image_view_pager2)
-            fun bind(currentImage : String){
-                val connectivityManager = context?.
-                getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            fun bind(currentImage: String) {
+                val connectivityManager =
+                    context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
                 val activeNetworkInfo = connectivityManager.activeNetworkInfo
                 if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
                     if (currentImage.isNotEmpty()) {
@@ -245,7 +262,8 @@ class DetailsFragment : BottomSheetDialogFragment() {
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-            val view : View = LayoutInflater.from(parent.context).inflate(R.layout.image_item,parent,false)
+            val view: View = LayoutInflater.from(parent.context)
+                .inflate(R.layout.image_item, parent, false)
             return ImageViewHolder(view)
         }
 
@@ -257,7 +275,8 @@ class DetailsFragment : BottomSheetDialogFragment() {
             image = images[position]
             holder.bind(image)
         }
-        fun setData(images: List<String>){
+
+        fun setData(images: List<String>) {
             this.images = images
             notifyDataSetChanged()
         }
